@@ -4,6 +4,8 @@
 
 const AWS = require('aws-sdk');
 
+const auth = require('./auth');
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
@@ -15,8 +17,8 @@ const s3BaseConfig = {
   Bucket: 'fastpad',
 }
 
-async function loadUser(userHash){
-  const data = await new Promise((resolve, reject) => {
+function loadUserRaw(userHash){
+  return new Promise((resolve, reject) => {
     s3.getObject({
       ...s3Config,
       Key: `data/${userHash}.json`,
@@ -25,71 +27,78 @@ async function loadUser(userHash){
         console.log('Failed to retrieve an object: ' + error);
         resolve(false);
       } else {
-        const index = data.Body.toString();
-        resolve(index);
+        const rawData = data.Body.toString();
+        resolve(rawData);
       }
     });
   });
+}
+
+async function loadUser(apikey){
+  const { userHash, passHash } = auth.parseApiKey(apikey);
+  const encrypted = await loadUserRaw(userHash);
+  const data = auth.decryptData(passHash, encrypted);
   return {
     exists: !!data,
-    data: data || {},
+    data: {
+      notes: [],
+      ...data,
+    },
   };
 }
 
-function getIndex() {
-  // https://s3.amazonaws.com/mpaulweeks-redirect/fe/index.html
-  return new Promise((resolve, reject) => {
-    s3.getObject({
-      ...s3Config,
-      Key: 'fe/index.html',
-    }, (error, data) => {
-      if (error != null) {
-        console.log('Failed to retrieve an object: ' + error);
-        reject(error);
-      } else {
-        const index = data.Body.toString();
-        resolve(index);
-      }
-    });
-  });
-}
-
-function getLinks() {
-  // https://s3.amazonaws.com/mpaulweeks-redirect/links.json
-  return new Promise((resolve, reject) => {
-    s3.getObject({
-      ...s3Config,
-    }, (error, data) => {
-      if (error != null) {
-        console.log('Failed to retrieve an object: ' + error);
-        reject(error);
-      } else {
-        const links = JSON.parse(data.Body.toString());
-        resolve(links);
-      }
-    });
-  });
-}
-
-function putLinks(links) {
-  // https://s3.amazonaws.com/mpaulweeks-redirect/links.json
+async function saveUser(apikey, data){
+  const { userHash, passHash } = auth.parseApiKey(apikey);
+  const encrypted = auth.encryptData(passHash, data);
   return new Promise((resolve, reject) => {
     s3.putObject({
       ...s3Config,
-      Body: JSON.stringify(links, null, 2),
+      Body: encrypted,
     }, (error, data) => {
       if (error != null) {
         console.log('Failed to put an object: ' + error);
         reject(error);
       } else {
-        resolve(links);
+        resolve();
       }
     });
   });
 }
 
+async function checkUsername(username) {
+  const userHash = hashUsername(username);
+  const encrypted = await loadUserRaw(userHash);
+  return !!encrypted;
+}
+
+async function getNotes(apikey) {
+  const user = await loadUser(apikey);
+  return user.data.notes;
+}
+
+async function addNote(apikey, newNote) {
+  const user = await loadUser(apikey);
+  const { data } = user;
+  data.notes.push(newNote);
+  const success = await saveUser(apikey, data);
+  return success;
+}
+
+async function updateNote(apikey, newNote) {
+  const user = await loadUser(apikey);
+  const { data } = user;
+  data.notes.forEach((note, index) => {
+    if (note.id = newNote.id) {
+      data.notes[index] = newNote;
+    }
+  });
+  const success = await saveUser(apikey, data);
+  return success;
+}
+
 module.exports = {
-  getIndex,
-  getLinks,
-  putLinks,
+  checkUsername,
+  getNotes,
+  addNote,
+  updateNote,
 };

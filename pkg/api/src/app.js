@@ -29,7 +29,9 @@ app.post('/apikey', (req, res) => {
 app.get('/', (req, res) => {
   console.log(process.env.AWS_ACCESS_KEY_ID)
   console.log(process.env.AWS_SECRET_ACCESS_KEY)
-  res.send('hello')
+  res.send(JSON.stringify({
+    apikey: auth.generateApiKey('hello', 'world'),
+  }));
 });
 
 module.exports = app;

@@ -11,11 +11,11 @@ function hashInput(str) {
     hash = ((hash<<5)-hash)+char;
     hash = hash & hash; // Convert to 32bit integer
   }
-  return hash;
+  return Math.abs(hash);
 }
 
 function hashUsername(username){
-  return hashInput('user:' + hashInput);
+  return hashInput('user:' + username);
 }
 
 function hashPassword(password){
@@ -34,9 +34,30 @@ function parseApiKey(apiKey){
   };
 }
 
+const todoEncryptor = '!!!!!!!!!!!';
+
+function encryptData(passHash, data) {
+  return todoEncryptor + JSON.stringify(data);
+}
+
+function decryptData(passHash, encrypted) {
+  if (!encrypted){
+    return null;
+  }
+  const decrypted = encrypted.split(todoEncryptor)[1];
+  try {
+    return JSON.parse(encrypted);
+  } catch (e) {
+    console.log(e);
+    throw new Exception('wrong password');
+  }
+}
+
 module.exports = {
   hashUsername,
   hashPassword,
   generateApiKey,
   parseApiKey,
+  encryptData,
+  decrpytData,
 };
