@@ -1,0 +1,12 @@
+{
+  "name": "fastpad-api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "echo 'todo api tests'"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "fastpad",
+  "version": "0.1.0",
+  "repository": "git@github.com:mpaulweeks/fastpad.git",
+  "author": "mpaulweeks <mpaulweeks@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "setup": "yarn install && cd pkg/api && yarn install && cd ../app && yarn install",
+    "api": "cd pkg/api && yarn run start",
+    "app": "cd pkg/app && yarn run start",
+    "test": "cd pkg/api && yarn run test && cd ../app && yarn run test",
+    "deploy": "cd pkg/api && yarn run deploy && cd ../app && yarn run deploy"
+  }
+}
