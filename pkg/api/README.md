@@ -3,6 +3,13 @@
 https://yi9bbl5wp1.execute-api.us-east-1.amazonaws.com/production
 https://yi9bbl5wp1.execute-api.us-east-1.amazonaws.com/staging
 
+This folder should have a `.env` file with the following variables:
+
+```
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+```
+
 ## installation
 
 Following this [setup guide](https://medium.freecodecamp.org/express-js-and-aws-lambda-a-serverless-love-story-7c77ba0eaa35)
