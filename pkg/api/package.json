@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "nodemon src/app.local.js",
-    "test": "echo 'todo api tests'"
+    "start": "nodemon src/api.local.js",
+    "test": "jest"
   },
   "dependencies": {
     "aws-sdk": "^2.353.0",
@@ -12,5 +12,8 @@
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "nodemon": "^1.18.6"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
   }
 }

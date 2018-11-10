@@ -11,7 +11,7 @@ function hashInput(str) {
     hash = ((hash<<5)-hash)+char;
     hash = hash & hash; // Convert to 32bit integer
   }
-  return Math.abs(hash);
+  return Math.abs(hash).toString();
 }
 
 function hashUsername(username){
@@ -59,5 +59,5 @@ module.exports = {
   generateApiKey,
   parseApiKey,
   encryptData,
-  decrpytData,
+  decryptData,
 };
