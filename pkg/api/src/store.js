@@ -4,6 +4,12 @@
 
 const AWS = require('aws-sdk');
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').load();
+}
+console.log(process.env.AWS_ACCESS_KEY_ID)
+console.log(process.env.AWS_SECRET_ACCESS_KEY)
+
 const s3 = new AWS.S3();
 const s3Config = {
   Bucket: 'mpaulweeks-redirect',

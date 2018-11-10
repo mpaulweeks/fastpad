@@ -126,7 +126,8 @@ app.get('/:key', (req, res) => {
   tryRedirect(req, res, key);
 })
 app.get('/', (req, res) => {
-  tryRedirect(req, res, 'root');
+  console.log(process.env.AWS_ACCESS_KEY_ID)
+  console.log(process.env.AWS_SECRET_ACCESS_KEY)
 })
 
 module.exports = app
