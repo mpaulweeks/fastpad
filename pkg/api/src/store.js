@@ -11,9 +11,29 @@ console.log(process.env.AWS_ACCESS_KEY_ID)
 console.log(process.env.AWS_SECRET_ACCESS_KEY)
 
 const s3 = new AWS.S3();
-const s3Config = {
-  Bucket: 'mpaulweeks-redirect',
-  Key: 'links.json',
+const s3BaseConfig = {
+  Bucket: 'fastpad',
+}
+
+async function loadUser(userHash){
+  const data = await new Promise((resolve, reject) => {
+    s3.getObject({
+      ...s3Config,
+      Key: `data/${userHash}.json`,
+    }, (error, data) => {
+      if (error != null) {
+        console.log('Failed to retrieve an object: ' + error);
+        resolve(false);
+      } else {
+        const index = data.Body.toString();
+        resolve(index);
+      }
+    });
+  });
+  return {
+    exists: !!data,
+    data: data || {},
+  };
 }
 
 function getIndex() {
