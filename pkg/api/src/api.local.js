@@ -1,8 +1,8 @@
 'use strict'
 
-const app = require('./app')
+const api = require('./api')
 const port = process.env.PORT || 3001
 
-app.listen(port, () =>
+api.listen(port, () =>
   console.log(`Server is listening on port ${port}.`)
 )
