@@ -28,7 +28,6 @@ function loadUserRaw(userHash){
       Key: `data/${userHash}.json`,
     }, (error, data) => {
       if (error != null) {
-        console.log('Failed to retrieve an object: ' + error);
         reject(new exception.UserNotFound());
       } else {
         const rawData = data.Body.toString();
@@ -60,7 +59,6 @@ async function saveUser(apikey, data){
       Body: encrypted,
     }, (error, data) => {
       if (error != null) {
-        console.log('Failed to put an object: ' + error);
         reject(new exception.UserNotFound());
       } else {
         resolve();

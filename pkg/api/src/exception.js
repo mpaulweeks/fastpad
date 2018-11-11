@@ -1,4 +1,10 @@
 
+class InvalidApiKey extends Error {
+  constructor(...props){
+    super(...props);
+    this.code = 400;
+  }
+}
 class UserNotFound extends Error {
   constructor(...props){
     super(...props);
@@ -19,6 +25,7 @@ class IncorrectAuth extends Error {
 }
 
 module.exports = {
+  InvalidApiKey,
   UserNotFound,
   NoteNotFound,
   IncorrectAuth,

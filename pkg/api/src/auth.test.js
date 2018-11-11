@@ -1,8 +1,5 @@
+const testHelper = require('./testhelper');
 const auth = require('./auth');
-
-function toJSON(data){
-  return JSON.stringify(data, Object.keys(data).sort());
-}
 
 test('hashUsername', () => {
   const username = 'hello@aol.com';
@@ -17,7 +14,7 @@ test('encrypt/decrypt', () => {
   const encrypted = auth.encryptData(passHash, data);
   const decrypted = auth.decryptData(passHash, encrypted);
 
-  const expected = toJSON(data);
-  const result = toJSON(decrypted);
+  const expected = testHelper.toJSON(data);
+  const result = testHelper.toJSON(decrypted);
   expect(result).toBe(expected);
 });

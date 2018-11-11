@@ -19,8 +19,11 @@ function generateApiKey(username, password){
   return `${hashUsername(username)}:${hashPassword(password)}`;
 }
 
-function parseApiKey(apiKey){
-  const parts = apiKey.split(':');
+function parseApiKey(apikey){
+  const parts = apikey.split(':');
+  if (parts.length !== 2){
+    throw new exception.InvalidApiKey(apikey);
+  }
   return {
     userHash: parts[0],
     passHash: parts[1],
@@ -35,13 +38,11 @@ function decryptData(passHash, encrypted) {
   if (!encrypted){
     return null;
   }
-  const bytes = CryptoJS.AES.decrypt(encrypted, passHash);
-  const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
   try {
+    const bytes = CryptoJS.AES.decrypt(encrypted, passHash);
+    const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
     return JSON.parse(decryptedString);
   } catch (e) {
-    console.log(decryptedString);
-    console.log(e);
     throw new exception.IncorrectAuth();
   }
 }
