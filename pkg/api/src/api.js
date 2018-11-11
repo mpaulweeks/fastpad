@@ -18,11 +18,44 @@ app.use(function(req, res, next) {
 
 // routes
 
+app.get('/notes', (req, res) => {
+  const apikey = req.get('apikey');
+  res.send(JSON.stringify({
+    notes: store.getNotes(apikey),
+  }));
+});
+
+app.post('/notes', (req, res) => {
+  const apikey = req.get('apikey');
+  const { text } = req.body;
+  res.send(JSON.stringify({
+    result: store.addNote(apikey, text),
+  }));
+});
+
+app.patch('/notes/:id', (req, res) => {
+  const apikey = req.get('apikey');
+  const { id } = req.params;
+  const newNote = {
+    text: req.body.text,
+  };
+  res.send(JSON.stringify({
+    result: store.updateNote(apikey, id, newNote);
+  }));
+});
+
 app.post('/apikey', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   res.send(JSON.stringify({
     apikey: auth.generateApiKey(username, password),
+  }));
+});
+
+app.get('/check', (req, res) => {
+  const username = req.body.username;
+  res.send(JSON.stringify({
+    exists: store.checkUsername(username),
   }));
 });
 

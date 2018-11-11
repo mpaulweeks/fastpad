@@ -17,6 +17,14 @@ const s3BaseConfig = {
   Bucket: 'fastpad',
 }
 
+function newId() {
+  return 1234567;
+}
+
+function getNow() {
+  return new Date().toISOString();
+}
+
 function loadUserRaw(userHash){
   return new Promise((resolve, reject) => {
     s3.getObject({
@@ -76,20 +84,30 @@ async function getNotes(apikey) {
   return user.data.notes;
 }
 
-async function addNote(apikey, newNote) {
+async function addNote(apikey, text) {
   const user = await loadUser(apikey);
   const { data } = user;
+  const newNote = {
+    id: newId(),
+    text: text,
+    created: getNow(),
+    updated: getNow(),
+  };
   data.notes.push(newNote);
   const success = await saveUser(apikey, data);
   return success;
 }
 
-async function updateNote(apikey, newNote) {
+async function updateNote(apikey, id, text) {
   const user = await loadUser(apikey);
   const { data } = user;
   data.notes.forEach((note, index) => {
-    if (note.id = newNote.id) {
-      data.notes[index] = newNote;
+    if (note.id = id) {
+      data.notes[index] = {
+        ...note,
+        text: text,
+        updated: getNow(),
+      };
     }
   });
   const success = await saveUser(apikey, data);
