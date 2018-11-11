@@ -7,8 +7,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
+    "deploy": "echo 'todo native deploy'",
     "test": "node ./node_modules/jest/bin/jest.js --watchAll",
-    "ci": "echo 'todo'"
+    "ci": "echo 'todo native ci'"
   },
   "jest": {
     "preset": "jest-expo"
