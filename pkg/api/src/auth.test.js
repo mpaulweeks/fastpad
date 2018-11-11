@@ -1,4 +1,5 @@
 const testHelper = require('./testhelper');
+const exception = require('./exception');
 const auth = require('./auth');
 
 test('hashUsername', () => {
@@ -17,4 +18,12 @@ test('encrypt/decrypt', () => {
   const expected = testHelper.toJSON(data);
   const result = testHelper.toJSON(decrypted);
   expect(result).toBe(expected);
+});
+
+test('encrypt raises error', () => {
+  const passHash = null;
+  const data = { a: '123', b: 45 };
+
+  expect(() => auth.encryptData(passHash, data))
+    .toThrow(exception.InvalidApiKey);
 });

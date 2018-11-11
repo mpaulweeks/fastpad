@@ -31,6 +31,9 @@ function parseApiKey(apikey){
 }
 
 function encryptData(passHash, data) {
+  if (!passHash){
+    throw new exception.InvalidApiKey();
+  }
   return CryptoJS.AES.encrypt(JSON.stringify(data), passHash).toString();
 }
 
