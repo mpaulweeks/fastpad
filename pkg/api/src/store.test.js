@@ -70,8 +70,9 @@ test('getNotes returns notes', async () => {
   const data = newTestUser();
   mockGetUser(apikey, data);
 
+  const resultNotes = await store.getNotes(apikey);
   const expected = testHelper.toJSON(data.notes);
-  const result = testHelper.toJSON(await store.getNotes(apikey));
+  const result = testHelper.toJSON(resultNotes);
   expect(result).toBe(expected);
 });
 test('getNotes returns user error', async () => {
