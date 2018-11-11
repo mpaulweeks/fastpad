@@ -1,17 +1,8 @@
 
+const CryptoJS = require('crypto-js');
 
 function hashInput(str) {
-  // https://stackoverflow.com/a/8831937/6461842
-  var hash = 0;
-  if (!str || str.length === 0) {
-    return hash;
-  }
-  for (var i = 0; i < str.length; i++) {
-    var char = str.charCodeAt(i);
-    hash = ((hash<<5)-hash)+char;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  return Math.abs(hash).toString();
+  return CryptoJS.SHA3(str, { outputLength: 64 }).toString();
 }
 
 function hashUsername(username){
@@ -34,20 +25,20 @@ function parseApiKey(apiKey){
   };
 }
 
-const todoEncryptor = '!!!!!!!!!!!';
-
 function encryptData(passHash, data) {
-  return todoEncryptor + JSON.stringify(data);
+  return CryptoJS.AES.encrypt(JSON.stringify(data), passHash).toString();
 }
 
 function decryptData(passHash, encrypted) {
   if (!encrypted){
     return null;
   }
-  const decrypted = encrypted.split(todoEncryptor)[1];
+  const bytes = CryptoJS.AES.decrypt(encrypted, passHash);
+  const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
   try {
-    return JSON.parse(encrypted);
+    return JSON.parse(decryptedString);
   } catch (e) {
+    console.log(decryptedString);
     console.log(e);
     throw new Exception('wrong password');
   }
