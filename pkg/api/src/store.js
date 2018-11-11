@@ -1,19 +1,14 @@
 'use strict'
 
-// MASSIVE TODO this is placeholder from other project
-
 const AWS = require('aws-sdk');
 
-const error = require('./error');
+const exception = require('./exception');
 const auth = require('./auth');
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
-console.log(process.env.AWS_ACCESS_KEY_ID)
-console.log(process.env.AWS_SECRET_ACCESS_KEY)
 
-const s3 = new AWS.S3();
 const s3BaseConfig = {
   Bucket: 'fastpad',
 }
@@ -28,13 +23,13 @@ function getNow() {
 
 function loadUserRaw(userHash){
   return new Promise((resolve, reject) => {
-    s3.getObject({
-      ...s3Config,
+    new AWS.S3().getObject({
+      ...s3BaseConfig,
       Key: `data/${userHash}.json`,
     }, (error, data) => {
       if (error != null) {
         console.log('Failed to retrieve an object: ' + error);
-        resolve(new error.UserNotFound());
+        reject(new exception.UserNotFound());
       } else {
         const rawData = data.Body.toString();
         resolve(rawData);
@@ -60,13 +55,13 @@ async function saveUser(apikey, data){
   const { userHash, passHash } = auth.parseApiKey(apikey);
   const encrypted = auth.encryptData(passHash, data);
   return new Promise((resolve, reject) => {
-    s3.putObject({
-      ...s3Config,
+    new AWS.S3().putObject({
+      ...s3BaseConfig,
       Body: encrypted,
     }, (error, data) => {
       if (error != null) {
         console.log('Failed to put an object: ' + error);
-        reject(error);
+        reject(new exception.UserNotFound());
       } else {
         resolve();
       }
@@ -75,7 +70,7 @@ async function saveUser(apikey, data){
 }
 
 async function checkUsername(username) {
-  const userHash = hashUsername(username);
+  const userHash = auth.hashUsername(username);
   await loadUserRaw(userHash);
   return true;
 }

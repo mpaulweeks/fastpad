@@ -1,7 +1,7 @@
 const auth = require('./auth');
 
 function toJSON(data){
-  return JSON.stringify(data);
+  return JSON.stringify(data, Object.keys(data).sort());
 }
 
 test('hashUsername', () => {
