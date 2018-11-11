@@ -1,0 +1,10 @@
+{
+  "lambda": {
+    "role": "fastpad-api-executor",
+    "name": "fastpad-api",
+    "region": "us-east-1"
+  },
+  "api": {
+    "id": "1d7ibyh21j"
+  }
+}

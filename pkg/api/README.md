@@ -1,7 +1,7 @@
 # redirect-api
 
-https://yi9bbl5wp1.execute-api.us-east-1.amazonaws.com/production
-https://yi9bbl5wp1.execute-api.us-east-1.amazonaws.com/staging
+https://1d7ibyh21j.execute-api.us-east-1.amazonaws.com/production
+https://1d7ibyh21j.execute-api.us-east-1.amazonaws.com/staging
 
 This folder should have a `.env` file with the following variables:
 
@@ -16,10 +16,20 @@ Following this [setup guide](https://medium.freecodecamp.org/express-js-and-aws-
 
 slightly altered steps for the initial setting up lambda deploy via claudia:
 
+### AWS permissions
+
+ensure user as full access for:
+- s3
+- lambda
+- iam
+- gateway
+
 ### create lambda proxy
 
+export `.env` vars
+
 ```
-yarn run claudia generate-serverless-express-proxy --express-module src/app
+yarn run claudia generate-serverless-express-proxy --express-module src/api
 rm package-lock.json
 ```
 

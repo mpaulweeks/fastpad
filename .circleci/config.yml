@@ -37,9 +37,19 @@ jobs:
           paths:
             - node_modules
             - pkg/api/node_modules
-            - pkg/app/node_modules
+            - pkg/native/node_modules
 
       - run:
           name: Run tests
           command: |
             yarn run ci
+            
+      - run:
+          name: Install AWS CLI
+          command: |
+            sudo apt-get -y -qq install awscli
+
+      - run:
+          name: Deploy
+          command: |
+            yarn run deploy

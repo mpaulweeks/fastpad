@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "deploy": "claudia update --version production",
+    "stage": "claudia update --version staging",
     "start": "nodemon src/api.local.js",
     "test": "jest --watchAll",
     "ci": "jest"
   },
   "dependencies": {
     "aws-sdk": "^2.353.0",
+    "aws-serverless-express": "^3.3.5",
     "body-parser": "^1.18.3",
     "crypto-js": "^3.1.9-1",
     "dotenv": "^6.1.0",
@@ -17,6 +20,7 @@
   },
   "devDependencies": {
     "aws-sdk-mock": "^4.2.0",
+    "claudia": "^5.1.2",
     "jest": "^23.6.0"
   }
 }

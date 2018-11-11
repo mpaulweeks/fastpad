@@ -6,10 +6,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "setup": "yarn install && cd pkg/api && yarn install && cd ../app && yarn install",
+    "setup": "yarn install && cd pkg/api && yarn install && cd ../native && yarn install",
     "api": "cd pkg/api && yarn run start",
-    "app": "cd pkg/app && yarn run start",
-    "ci": "cd pkg/api && yarn run ci && cd ../app && yarn run ci",
-    "deploy": "cd pkg/api && yarn run deploy && cd ../app && yarn run deploy"
+    "native": "cd pkg/native && yarn run start",
+    "ci": "cd pkg/api && yarn run ci && cd ../native && yarn run ci",
+    "deploy": "cd pkg/api && yarn run deploy && cd ../native && yarn run deploy"
   }
 }

@@ -1,7 +1,5 @@
 'use strict'
 
-// MASSIVE TODO this is placeholder from other project
-
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -67,9 +65,8 @@ app.get('/check', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  console.log(process.env.AWS_ACCESS_KEY_ID)
-  console.log(process.env.AWS_SECRET_ACCESS_KEY)
   res.send(JSON.stringify({
+    access: process.env.AWS_ACCESS_KEY_ID,
     apikey: auth.generateApiKey('hello', 'world'),
   }));
 });
