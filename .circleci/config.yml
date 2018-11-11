@@ -40,10 +40,15 @@ jobs:
             - pkg/native/node_modules
 
       - run:
-          name: Run tests
+          name: Test api
           command: |
-            yarn run ci
-            
+            cd pkg/api && yarn run ci
+
+      - run:
+          name: Test native
+          command: |
+            cd pkg/native && yarn run ci
+
       - run:
           name: Install AWS CLI
           command: |
