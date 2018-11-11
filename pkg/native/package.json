@@ -8,6 +8,7 @@
     "ios": "expo start --ios",
     "eject": "expo eject",
     "deploy": "echo 'todo native deploy'",
+    "stage": "echo 'todo native stage'",
     "test": "node ./node_modules/jest/bin/jest.js --watchAll",
     "ci": "echo 'todo native ci'"
   },

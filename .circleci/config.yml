@@ -55,6 +55,11 @@ jobs:
             sudo apt-get -y -qq install awscli
 
       - run:
-          name: Deploy
+          name: Deploy to staging
+          command: |
+            yarn run stage
+
+      - run:
+          name: Deploy to production
           command: |
             yarn run deploy

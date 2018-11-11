@@ -1,5 +1,6 @@
 # redirect-api
 
+https://1d7ibyh21j.execute-api.us-east-1.amazonaws.com/latest
 https://1d7ibyh21j.execute-api.us-east-1.amazonaws.com/production
 https://1d7ibyh21j.execute-api.us-east-1.amazonaws.com/staging
 

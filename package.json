@@ -10,6 +10,7 @@
     "api": "cd pkg/api && yarn run start",
     "native": "cd pkg/native && yarn run start",
     "ci": "cd pkg/api && yarn run ci && cd ../native && yarn run ci",
-    "deploy": "cd pkg/api && yarn run deploy && cd ../native && yarn run deploy"
+    "deploy": "cd pkg/api && yarn run deploy && cd ../native && yarn run deploy",
+    "stage": "cd pkg/api && yarn run stage && cd ../native && yarn run stage"
   }
 }
