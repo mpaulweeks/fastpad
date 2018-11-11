@@ -4,6 +4,7 @@
 
 const AWS = require('aws-sdk');
 
+const error = require('./error');
 const auth = require('./auth');
 
 if (process.env.NODE_ENV !== 'production') {
@@ -18,7 +19,7 @@ const s3BaseConfig = {
 }
 
 function newId() {
-  return 1234567;
+  return new Date().getTime();
 }
 
 function getNow() {
@@ -33,7 +34,7 @@ function loadUserRaw(userHash){
     }, (error, data) => {
       if (error != null) {
         console.log('Failed to retrieve an object: ' + error);
-        resolve(false);
+        resolve(new error.UserNotFound());
       } else {
         const rawData = data.Body.toString();
         resolve(rawData);
@@ -75,8 +76,8 @@ async function saveUser(apikey, data){
 
 async function checkUsername(username) {
   const userHash = hashUsername(username);
-  const encrypted = await loadUserRaw(userHash);
-  return !!encrypted;
+  await loadUserRaw(userHash);
+  return true;
 }
 
 async function getNotes(apikey) {
@@ -95,23 +96,29 @@ async function addNote(apikey, text) {
   };
   data.notes.push(newNote);
   const success = await saveUser(apikey, data);
-  return success;
+  return newNote;
 }
 
 async function updateNote(apikey, id, text) {
   const user = await loadUser(apikey);
   const { data } = user;
+  let newNote;
   data.notes.forEach((note, index) => {
     if (note.id = id) {
-      data.notes[index] = {
+      newNote = {
         ...note,
         text: text,
         updated: getNow(),
       };
+      data.notes[index] = newNote;
     }
   });
-  const success = await saveUser(apikey, data);
-  return success;
+  if (newNote){
+    const success = await saveUser(apikey, data);
+    return newNote;
+  } else {
+    throw new error.NoteNotFound();
+  }
 }
 
 module.exports = {

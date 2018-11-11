@@ -15,6 +15,14 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+app.use(function (err, req, res, next) {
+  if (err.code) {
+    res.status(err.code);
+  } else {
+    res.status(500);
+  }
+  res.render('error', { error: err })
+});
 
 // routes
 
@@ -40,7 +48,7 @@ app.patch('/notes/:id', (req, res) => {
     text: req.body.text,
   };
   res.send(JSON.stringify({
-    result: store.updateNote(apikey, id, newNote);
+    result: store.updateNote(apikey, id, newNote),
   }));
 });
 
@@ -54,9 +62,8 @@ app.post('/apikey', (req, res) => {
 
 app.get('/check', (req, res) => {
   const username = req.body.username;
-  res.send(JSON.stringify({
-    exists: store.checkUsername(username),
-  }));
+  store.checkUsername(username);
+  res.status(200);
 });
 
 app.get('/', (req, res) => {

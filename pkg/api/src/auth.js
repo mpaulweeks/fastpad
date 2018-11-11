@@ -1,6 +1,8 @@
 
 const CryptoJS = require('crypto-js');
 
+const error = require('./error');
+
 function hashInput(str) {
   return CryptoJS.SHA3(str, { outputLength: 64 }).toString();
 }
@@ -40,7 +42,7 @@ function decryptData(passHash, encrypted) {
   } catch (e) {
     console.log(decryptedString);
     console.log(e);
-    throw new Exception('wrong password');
+    throw new error.IncorrectAuth();
   }
 }
 
