@@ -5,10 +5,16 @@ class InvalidApiKey extends Error {
     this.code = 400;
   }
 }
+class UserAlreadyExists extends Error {
+  constructor(...props){
+    super(...props);
+    this.code = 400;
+  }
+}
 class UserNotFound extends Error {
   constructor(...props){
     super(...props);
-    this.code = 403;
+    this.code = 404;
   }
 }
 class NoteNotFound extends Error {

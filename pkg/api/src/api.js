@@ -22,7 +22,7 @@ app.use(function (err, req, res, next) {
   res.render('error', { error: err })
 });
 
-// routes
+// apikey routes
 
 app.get('/notes', (req, res) => {
   const apikey = req.get('apikey');
@@ -30,7 +30,6 @@ app.get('/notes', (req, res) => {
     notes: store.getNotes(apikey),
   }));
 });
-
 app.post('/notes', (req, res) => {
   const apikey = req.get('apikey');
   const { text } = req.body;
@@ -38,7 +37,6 @@ app.post('/notes', (req, res) => {
     result: store.addNote(apikey, text),
   }));
 });
-
 app.patch('/notes/:id', (req, res) => {
   const apikey = req.get('apikey');
   const { id } = req.params;
@@ -49,7 +47,30 @@ app.patch('/notes/:id', (req, res) => {
     result: store.updateNote(apikey, id, newNote),
   }));
 });
+app.delete('/notes/:id', (req, res) => {
+  const apikey = req.get('apikey');
+  const { id } = req.params;
+  res.send(JSON.stringify({
+    notes: store.deleteNote(apikey, id),
+  }));
+});
+app.put('/password', (req, res) => {
+  const apikey = req.get('apikey');
+  const password = req.body.password;
+  res.send(JSON.stringify({
+    apikey: auth.changePassword(apikey, password),
+  }));
+});
 
+// anonymous routes
+
+app.post('/user', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  res.send(JSON.stringify({
+    result: auth.createUser(username, password),
+  }));
+});
 app.post('/apikey', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -57,12 +78,13 @@ app.post('/apikey', (req, res) => {
     apikey: auth.generateApiKey(username, password),
   }));
 });
-
 app.get('/check', (req, res) => {
   const username = req.body.username;
   store.checkUsername(username);
   res.status(200);
 });
+
+// root
 
 app.get('/', (req, res) => {
   res.send(JSON.stringify({

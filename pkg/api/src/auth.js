@@ -19,6 +19,12 @@ function generateApiKey(username, password){
   return `${hashUsername(username)}:${hashPassword(password)}`;
 }
 
+function changePassword(apikey, newPassword){
+  const { userHash } = auth.parseApiKey(apikey);
+  const passHash = hashPassword(newPassword);
+  return `${userHash}:${passHash}`;
+}
+
 function parseApiKey(apikey){
   const parts = apikey.split(':');
   if (parts.length !== 2){
