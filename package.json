@@ -9,7 +9,7 @@
     "setup": "yarn install && cd pkg/api && yarn install && cd ../app && yarn install",
     "api": "cd pkg/api && yarn run start",
     "app": "cd pkg/app && yarn run start",
-    "test": "cd pkg/api && yarn run test && cd ../app && yarn run test",
+    "ci": "cd pkg/api && yarn run ci && cd ../app && yarn run ci",
     "deploy": "cd pkg/api && yarn run deploy && cd ../app && yarn run deploy"
   }
 }

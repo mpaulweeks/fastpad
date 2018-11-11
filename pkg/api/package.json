@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon src/api.local.js",
-    "test": "jest"
+    "test": "jest --watchAll",
+    "ci": "jest"
   },
   "dependencies": {
     "aws-sdk": "^2.353.0",
