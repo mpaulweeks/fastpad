@@ -49,9 +49,11 @@ async function saveUser(apikey, data){
   return new Promise((resolve, reject) => {
     new AWS.S3().putObject({
       ...s3BaseConfig,
+      Key: `data/${userHash}.json`,
       Body: encrypted,
     }, (error, data) => {
       if (error != null) {
+        console.log(error);
         reject(new exception.UserNotFound());
       } else {
         resolve();
@@ -91,6 +93,9 @@ async function getNotes(apikey) {
 }
 
 async function addNote(apikey, text) {
+  if (!text) {
+    throw new exception.EmptyText();
+  }
   const user = await loadUser(apikey);
   const newNote = {
     id: newId(),
@@ -120,7 +125,7 @@ async function updateNote(apikey, id, text) {
     const success = await saveUser(apikey, user);
     return newNote;
   } else {
-    throw new error.NoteNotFound();
+    throw new exception.NoteNotFound();
   }
 }
 
@@ -132,7 +137,7 @@ async function deleteNote(apikey, id) {
     const success = await saveUser(apikey, user);
     return newNotes;
   } else {
-    throw new error.NoteNotFound();
+    throw new exception.NoteNotFound();
   }
 }
 

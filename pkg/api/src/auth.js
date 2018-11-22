@@ -26,6 +26,9 @@ function changePassword(apikey, newPassword){
 }
 
 function parseApiKey(apikey){
+  if (!apikey){
+    throw new exception.InvalidApiKey(apikey);
+  }
   const parts = apikey.split(':');
   if (parts.length !== 2){
     throw new exception.InvalidApiKey(apikey);
