@@ -2,13 +2,11 @@ import React from 'react';
 import {
   TextInput,
   StyleSheet,
-  KeyboardAvoidingView,
   ScrollView,
   View,
   Text,
   Button,
 } from 'react-native';
-import { NavigationEvents } from "react-navigation";
 
 export default class NoteEditor extends React.Component {
   input = null;
@@ -48,56 +46,51 @@ export default class NoteEditor extends React.Component {
         backgroundColor: '#FEFAE1',
         color: '#000000',
       },
-      exit: {
+      header: {
         paddingTop: 35, // header
         width: '100%',
         padding: 5,
       },
-      exitText: {
+      done: {
         padding: 5,
         fontSize: 16,
         textAlign: 'right',
         fontWeight: 'bold',
         color: '#666666',
       },
-      keyboard: {
+      scroll: {
+        flex: 1,
       },
       input: {
-        flex: 1,
         padding: 15,
         fontSize: 24,
         ...this.props.userStyles,
       },
       buffer: {
-        height: 90,
+        height: 200,
       },
     });
     const { text } = this.state;
     return (
       <View style={styles.container}>
-        <View style={styles.exit}>
+        <View style={styles.header}>
           <Text
-            style={styles.exitText}
+            style={styles.done}
             onPress={this._defocus}
           >
             done
           </Text>
         </View>
-        <ScrollView>
-          <KeyboardAvoidingView
-            style={styles.keyboard}
-            behavior="padding"
-          >
-            <TextInput
-              ref={r => this.input = r}
-              style={styles.input}
-              multiline={true}
-              onChangeText={this._handleTextChange}
-              autoFocus
-              placeholder="start typing your new note"
-              value={text}
-            />
-          </KeyboardAvoidingView>
+        <ScrollView style={styles.scroll}>
+          <TextInput
+            ref={r => this.input = r}
+            style={styles.input}
+            multiline={true}
+            onChangeText={this._handleTextChange}
+            autoFocus
+            placeholder="start typing your new note"
+            value={text}
+          />
           <View style={styles.buffer} />
         </ScrollView>
       </View>
