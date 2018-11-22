@@ -11,9 +11,18 @@ import {
 export default class NoteEditor extends React.Component {
   input = null;
   state = {
-    text: '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4',
+    note: null,
     editTimeout: null,
   };
+
+  componentWillReceiveProps(props) {
+    const { note } = this.props;
+    if (!note || note.id !== props.note.id){
+      this.setState({
+        note: props.note,
+      });
+    }
+  }
 
   // text editing
   _handleTextChange = (newText) => {
@@ -22,7 +31,10 @@ export default class NoteEditor extends React.Component {
       this.saveNote();
     }, 5 * 1000);
     this.setState({
-      text: newText,
+      note: {
+        ...this.state.note,
+        text: newText,
+      },
       editTimeout: newTimeout,
     });
   }
@@ -51,6 +63,13 @@ export default class NoteEditor extends React.Component {
         width: '100%',
         padding: 5,
       },
+      id: {
+        padding: 5,
+        fontSize: 16,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color: 'lightblue',
+      },
       done: {
         padding: 5,
         fontSize: 16,
@@ -70,10 +89,15 @@ export default class NoteEditor extends React.Component {
         height: 200,
       },
     });
-    const { text } = this.state;
+    const { note } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.header}>
+          <Text
+            style={styles.id}
+          >
+            {note && note.id}
+          </Text>
           <Text
             style={styles.done}
             onPress={this._defocus}
@@ -81,18 +105,24 @@ export default class NoteEditor extends React.Component {
             done
           </Text>
         </View>
-        <ScrollView style={styles.scroll}>
-          <TextInput
-            ref={r => this.input = r}
-            style={styles.input}
-            multiline={true}
-            onChangeText={this._handleTextChange}
-            autoFocus
-            placeholder="start typing your new note"
-            value={text}
-          />
-          <View style={styles.buffer} />
-        </ScrollView>
+        {note ? (
+          <ScrollView style={styles.scroll}>
+            <TextInput
+              ref={r => this.input = r}
+              style={styles.input}
+              multiline={true}
+              onChangeText={this._handleTextChange}
+              autoFocus
+              placeholder="start typing your new note"
+              value={note.text}
+            />
+            <View style={styles.buffer} />
+          </ScrollView>
+        ) : (
+          <View>
+            <Text>loading...</Text>
+          </View>
+        )}
       </View>
     );
   }

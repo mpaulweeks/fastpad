@@ -4,7 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import EditScreen from '../screens/EditScreen';
+import NewNoteScreen from '../screens/NewNoteScreen';
 import NotesScreen from '../screens/NotesScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
@@ -27,7 +27,7 @@ HomeStack.navigationOptions = {
 };
 
 const EditStack = createStackNavigator({
-  Edit: EditScreen,
+  Edit: NewNoteScreen,
 });
 
 EditStack.navigationOptions = {
