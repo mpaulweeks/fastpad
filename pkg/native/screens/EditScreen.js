@@ -2,18 +2,21 @@ import React from 'react';
 import {
   AppState,
   ScrollView,
-  StyleSheet,
   TextInput,
+  StyleSheet,
 } from 'react-native';
+import { NavigationEvents } from "react-navigation";
 
 export default class EditScreen extends React.Component {
   static navigationOptions = {
-    title: 'Edit',
+    title: 'New Note',
   };
+  input = null;
   state = {
-    text: 'hello world\n\nnice!',
-  }
+    text: '',
+  };
 
+  // mounting and unmounting
   componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange);
   }
@@ -21,21 +24,30 @@ export default class EditScreen extends React.Component {
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
   _handleAppStateChange = (nextAppState) => {
+    console.log('new AppState:', nextAppState);
     if (nextAppState === 'background') {
-      console.log('App is going to the background!');
-      this._archive();
+      this._saveNote();
+    }
+    if (nextAppState === 'active') {
+      this._focusText();
     }
   }
+  _focusText = () => {
+    console.log('focused');
+    this.input && this.input.focus();
+  }
+
+  // text editing
   _handleTextChange = (newText) => {
     clearTimeout(this.state.editTimeout);
     this.setState({
       text: newText,
       editTimeout: setTimeout(() => {
-        this._archive();
+        this._saveNote();
       }, 5 * 1000),
     });
   }
-  _archive = () => {
+  _saveNote = () => {
     clearTimeout(this.state.editTimeout);
     // todo write to server and local note storage
     console.log(this.state.text);
@@ -45,10 +57,14 @@ export default class EditScreen extends React.Component {
     const { text } = this.state;
     return (
       <ScrollView style={styles.container}>
+        <NavigationEvents onWillFocus={this._focusText}/>
         <TextInput
+          ref={r => this.input = r}
           style={styles.input}
           multiline={true}
           onChangeText={this._handleTextChange}
+          autoFocus
+          placeholder="start typing your new note"
           value={text}
         />
       </ScrollView>
