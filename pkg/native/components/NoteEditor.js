@@ -11,80 +11,73 @@ import {
 
 import DataStore from '../utils/DataStore';
 
+import { setEditorFocus, setEditorNote } from '../redux/actions';
+
 class NoteEditor extends React.Component {
   input = null;
   state = {
-    note: null,
     editTimeout: null,
   };
 
-  componentWillReceiveProps(props) {
-    const { note } = this.state;
-    if (!note || note._key !== props.note._key){
-      this.setState({
-        note: props.note,
-      });
+  componentWillReceiveProps(newProps) {
+    const { focused } = newProps;
+    if (focused) {
+      this.input && this.input.focus();
+    } else {
+      this.input && this.input.blur();
     }
   }
 
   // text editing
-  _handleTextChange = (newText) => {
+  _handleTextChange = async (newText) => {
     clearTimeout(this.state.editTimeout);
     const newTimeout = setTimeout(() => {
       this.saveNote();
-    }, 2 * 1000);
+    }, 10 * 1000);
+
+    const newNote = {
+      ...this.props.note,
+      text: newText,
+    };
+    await this.props.dispatch(setEditorNote(newNote));
     this.setState({
-      note: {
-        ...this.state.note,
-        text: newText,
-      },
       editTimeout: newTimeout,
     });
   }
   _toggleEdit = () => {
-    if (this.state.focused){
-      this.input && this.input.blur();
-    } else {
-      this.focusNote();
-    }
+    this.props.dispatch(setEditorFocus(!this.props.focused));
   }
-  saveNote = exiting => {
+  saveNote = async (exiting) => {
     // clear potentially waiting save
     clearTimeout(this.state.editTimeout);
 
-    const { note } = this.state;
-    console.log('saving: ', this.state);
+    const { note } = this.props;
+
+    console.log('saving: ', note);
     if (note.text) {
-      const promise = note.id
+      const newNote = await (note.id
         ? DataStore.updateNote(note.id, note.text)
-        : DataStore.createNote(note.text);
-      promise.then(newNote => {
-        this.setState({
-          note: {
-            ...note,
-            ...newNote,
-          },
-        }, () => console.log(this.state));
-      });
+        : DataStore.createNote(note.text)
+      );
+      await this.props.dispatch(setEditorNote({
+        ...note,
+        ...newNote,
+      }));
     } else if (exiting && note.id) {
       // delete empty note
       DataStore.deleteNote(note.id);
     }
   }
-  focusNote = () => {
-    console.log('focused');
-    this.input && this.input.focus();
-  }
 
+  focusNote = () => {
+    this.props.dispatch(setEditorFocus(true));
+  }
   onFocus = () => {
-    this.setState({
-      focused: true,
-    });
+    this.props.dispatch(setEditorFocus(true));
   }
   onBlur = () => {
-    this.setState({
-      focused: false,
-    }, this.saveNote);
+    this.props.dispatch(setEditorFocus(false));
+    this.saveNote();
   }
 
   render() {
@@ -118,7 +111,7 @@ class NoteEditor extends React.Component {
         height: 200,
       },
     });
-    const { note, focused } = this.state;
+    const { focused, note } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -154,4 +147,11 @@ class NoteEditor extends React.Component {
   }
 }
 
-export default connect()(NoteEditor);
+
+const mapStateToProps = state => ({
+  focused: state.editor.focused,
+  note: state.editor.note,
+});
+export default connect(
+  mapStateToProps,
+)(NoteEditor);

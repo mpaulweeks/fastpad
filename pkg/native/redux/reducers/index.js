@@ -1,6 +1,8 @@
-import { combineReducers } from 'redux'
-import thinking from './thinking'
+import { combineReducers } from 'redux';
+import editor from './editor';
+import thinking from './thinking';
 
 export default combineReducers({
+  editor,
   thinking,
 });
