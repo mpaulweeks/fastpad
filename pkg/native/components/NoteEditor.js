@@ -19,12 +19,14 @@ class NoteEditor extends React.Component {
     editTimeout: null,
   };
 
-  componentWillReceiveProps(newProps) {
-    const { focused } = newProps;
-    if (focused) {
-      this.input && this.input.focus();
-    } else {
-      this.input && this.input.blur();
+  componentDidUpdate(prevProps) {
+    const { focused, note } = this.props;
+    if (focused !== prevProps.focused) {
+      if (focused){
+        this.input && this.input.focus();
+      } else {
+        this.input && this.input.blur();
+      }
     }
   }
 
