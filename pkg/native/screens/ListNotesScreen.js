@@ -15,15 +15,46 @@ import Thinking from '../components/Thinking';
 import { setThinking, setEditorNote } from '../redux/actions';
 
 class ListNotesScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Notes',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Notes',
+      headerLeft: (
+        <Button
+          onPress={() => navigation.getParam('navToSettings')()}
+          title="gear"
+          color="blue"
+        />
+      ),
+      headerRight: (
+        <Button
+          onPress={() => navigation.getParam('navToCreateNew')()}
+          title="+"
+          color="blue"
+        />
+      ),
+    };
   };
+
   state = {
     notes: null,
   };
-
   componentDidMount(){
+    this.props.navigation.setParams({
+      navToSettings: this._navToSettings,
+      navToCreateNew: this._navToCreateNote,
+    });
     this._fetchNotes();
+  }
+  _navToSettings = async () => {
+    this.props.navigation.navigate('Home');
+  }
+  _navToCreateNote = async () => {
+    await this.props.dispatch(setEditorNote(null));
+    this.props.navigation.navigate('CreateNote');
+  }
+  _editNote = async (note) => {
+    await this.props.dispatch(setEditorNote(note));
+    this.props.navigation.navigate('CreateNote');
   }
   _fetchNotes = async () => {
     const { dispatch } = this.props;
@@ -42,11 +73,6 @@ class ListNotesScreen extends React.Component {
       notes: notes,
     });
     await dispatch(setThinking(false));
-  }
-  _editNote = async (note) => {
-    const { dispatch } = this.props;
-    await dispatch(setEditorNote(note));
-    this.props.navigation.navigate('CreateNote');
   }
 
   render() {

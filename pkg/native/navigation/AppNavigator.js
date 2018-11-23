@@ -42,7 +42,8 @@ const stacks = screens.reduce((obj, s) => {
 const MainNavigator = createMaterialTopTabNavigator(stacks, {
   order: ['Settings', 'Home', 'ListNotes', 'CreateNote'],
   animationEnabled: true,
-  initialRouteName: 'CreateNote',
+  initialRouteName: 'ListNotes',
+  // initialRouteName: 'CreateNote',
   navigationOptions: {
     tabBarVisible: false,
     lazy: true,
