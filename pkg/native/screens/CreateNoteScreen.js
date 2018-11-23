@@ -9,6 +9,7 @@ import {
 import { NavigationEvents } from "react-navigation";
 
 import Colors from '../constants/Colors';
+import NavTitle from '../components/NavTitle';
 import NavEdit from '../components/NavEdit';
 import NoteEditor from '../components/NoteEditor';
 
@@ -17,16 +18,14 @@ import { setEditorNote, setEditorFocus } from '../redux/actions';
 class CreateNoteScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: '',
+      headerTitle: <NavTitle />,
+      headerRight: <NavEdit />,
       headerLeft: (
         <Button
           onPress={() => navigation.getParam('navToListNotes')()}
           title="<"
           color={Colors.navButton}
         />
-      ),
-      headerRight: (
-        <NavEdit />
       ),
     };
   };
