@@ -16,7 +16,7 @@ class _Api {
     const result = await response.json();
     return result.notes;
   }
-  async saveNote(text){
+  async createNote(text){
     const response = await fetch(`${baseUrl}/notes`, {
       headers: {'apikey': this.apikey},
       method: 'POST',
@@ -30,6 +30,14 @@ class _Api {
       headers: {'apikey': this.apikey},
       method: 'PATCH',
       body: JSON.stringify({text: text}),
+    });
+    const result = await response.json();
+    return result;
+  }
+  async deleteNote(id, text){
+    const response = await fetch(`${baseUrl}/notes/${id}`, {
+      headers: {'apikey': this.apikey},
+      method: 'DELETE',
     });
     const result = await response.json();
     return result;

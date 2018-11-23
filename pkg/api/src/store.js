@@ -109,6 +109,9 @@ async function addNote(apikey, text) {
 }
 
 async function updateNote(apikey, id, text) {
+  if (!text) {
+    throw new exception.EmptyText();
+  }
   const user = await loadUser(apikey);
   let newNote;
   user.notes.forEach((note, index) => {
