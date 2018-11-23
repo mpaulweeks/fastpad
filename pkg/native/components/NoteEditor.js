@@ -30,9 +30,6 @@ class NoteEditor extends React.Component {
       }
     }
   }
-  _toggleEdit = () => {
-    this.props.dispatch(setEditorFocus(!this.props.focused));
-  }
   onFocus = () => {
     this.props.dispatch(setEditorFocus(true));
   }
@@ -86,18 +83,6 @@ class NoteEditor extends React.Component {
         backgroundColor: '#FEFAE1',
         color: '#000000',
       },
-      header: {
-        paddingTop: 45, // header
-        width: '100%',
-        padding: 5,
-      },
-      done: {
-        padding: 5,
-        fontSize: 16,
-        textAlign: 'right',
-        fontWeight: 'bold',
-        color: '#666666',
-      },
       scroll: {
         flex: 1,
       },
@@ -113,14 +98,6 @@ class NoteEditor extends React.Component {
     const { focused, note } = this.props;
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text
-            style={styles.done}
-            onPress={this._toggleEdit}
-          >
-            {focused ? 'done' : 'edit'}
-          </Text>
-        </View>
         {note ? (
           <ScrollView style={styles.scroll}>
             <TextInput

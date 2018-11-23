@@ -11,6 +11,7 @@ import { NavigationEvents } from "react-navigation";
 
 import DataStore from '../utils/DataStore';
 
+import Colors from '../constants/Colors';
 import Thinking from '../components/Thinking';
 import { setThinking, setEditorNote } from '../redux/actions';
 
@@ -22,14 +23,14 @@ class ListNotesScreen extends React.Component {
         <Button
           onPress={() => navigation.getParam('navToSettings')()}
           title="gear"
-          color="blue"
+          color={Colors.navButton}
         />
       ),
       headerRight: (
         <Button
           onPress={() => navigation.getParam('navToCreateNew')()}
           title="+"
-          color="blue"
+          color={Colors.navButton}
         />
       ),
     };

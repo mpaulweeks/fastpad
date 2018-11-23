@@ -3,23 +3,44 @@ import { connect } from 'react-redux';
 import {
   AppState,
   View,
-  Text,
+  Button,
   StyleSheet,
 } from 'react-native';
 import { NavigationEvents } from "react-navigation";
 
+import Colors from '../constants/Colors';
+import NavEdit from '../components/NavEdit';
 import NoteEditor from '../components/NoteEditor';
 
 import { setEditorNote, setEditorFocus } from '../redux/actions';
 
 class CreateNoteScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: '',
+      headerLeft: (
+        <Button
+          onPress={() => navigation.getParam('navToListNotes')()}
+          title="<"
+          color={Colors.navButton}
+        />
+      ),
+      headerRight: (
+        <NavEdit />
+      ),
+    };
   };
 
   // mounting and unmounting
   componentDidMount() {
+    this.props.navigation.setParams({
+      navToListNotes: this._navToListNotes,
+    });
     AppState.addEventListener('change', this._handleAppStateChange);
+  }
+  _navToListNotes = async () => {
+    await this.props.dispatch(setEditorFocus(false));
+    this.props.navigation.navigate('ListNotes');
   }
   componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange);
@@ -49,10 +70,6 @@ class CreateNoteScreen extends React.Component {
   _focusNote = () => {
     return this.props.dispatch(setEditorFocus(true));
   }
-  _gotoListNotesScreen = async () => {
-    await this.props.dispatch(setEditorFocus(false));
-    this.props.navigation.navigate('ListNotes');
-  }
 
   render() {
     // todo read from local settings
@@ -65,11 +82,6 @@ class CreateNoteScreen extends React.Component {
           ref={r => this.editor = r}
           userStyles={userStyles}
         />
-        <View style={styles.gotoList}>
-          <Text style={styles.gotoListText} onPress={this._gotoListNotesScreen}>
-            &lt;
-          </Text>
-        </View>
       </View>
     );
   }
@@ -79,19 +91,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
-  },
-  gotoList: {
-    position: 'absolute',
-    width: 50,
-    height: 50,
-    top: 45,
-    left: 10,
-    backgroundColor: 'rgba(0,0,0,0)',
-  },
-  gotoListText: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'black',
   },
 });
 
