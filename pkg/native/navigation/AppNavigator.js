@@ -1,5 +1,6 @@
 import React from 'react';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from '../redux/reducers';
 import {
@@ -58,7 +59,10 @@ const AppNavigator = createSwitchNavigator({
   initialRouteName: 'Main',
 });
 
-const store = createStore(rootReducer);
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+);
 export default () => (
   <Provider store={store}>
     <AppNavigator />

@@ -38,9 +38,6 @@ class ListNotesScreen extends React.Component {
     };
   };
 
-  state = {
-    notes: null,
-  };
   componentDidMount(){
     this.props.navigation.setParams({
       navToSettings: this._navToSettings,
@@ -60,13 +57,7 @@ class ListNotesScreen extends React.Component {
     this.props.navigation.navigate('CreateNote');
   }
   _fetchNotes = async () => {
-    const { dispatch } = this.props;
-    await dispatch(setThinking(true));
-    const notes = await DataStore.getNotes();
-    this.setState({
-      notes: notes,
-    });
-    await dispatch(setThinking(false));
+    await this.props.dispatch(DataStore.fetchNotes());
   }
   _deleteNote = async (id) => {
     const { dispatch } = this.props;
@@ -79,7 +70,7 @@ class ListNotesScreen extends React.Component {
   }
 
   render() {
-    const { notes } = this.state;
+    const { notes } = this.props;
     return (
       <View style={styles.container}>
         <NavigationEvents onWillFocus={this._fetchNotes}/>
@@ -111,6 +102,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  notes: state.notes.items,
   thinking: state.thinking,
 });
 

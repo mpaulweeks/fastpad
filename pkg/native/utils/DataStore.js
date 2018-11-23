@@ -1,3 +1,10 @@
+import {
+  setThinking,
+  fetchNotesBegin,
+  fetchNotesSuccess,
+  fetchNotesFailure,
+} from '../redux/actions';
+
 
 const baseUrl = "http://localhost:3001";
 
@@ -6,20 +13,36 @@ const baseUrl = "http://localhost:3001";
 class _Api {
   // example | hunter2
   apikey = '42e741065168145c:00f54c7e6d0b3748';
-
   loadApiKey(apikey){
     this.apikey = apikey;
   }
 
-  async getNotes(){
-    const response = await fetch(`${baseUrl}/notes`, {
-      method: 'GET',
-      headers: {
-        'apikey': this.apikey,
-      },
-    });
-    const result = await response.json();
-    return result.notes;
+  jsonOrErrors = (response) => {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    return response.json();
+  }
+
+  fetchNotes(){
+    return async (dispatch) => {
+      let notes = null;
+      await dispatch(setThinking(true));
+      try {
+        await dispatch(fetchNotesBegin());
+        const response = await fetch(`${baseUrl}/notes`, {
+          method: 'GET',
+          headers: {
+            'apikey': this.apikey,
+          },
+        });
+        const result = await this.jsonOrErrors(response);
+        await dispatch(fetchNotesSuccess(result.notes));
+      } catch (error) {
+        await dispatch(fetchNotesFailure(error));
+      }
+      await dispatch(setThinking(false));
+    }
   }
 
   async createNote(text){
@@ -31,7 +54,7 @@ class _Api {
       },
       body: JSON.stringify({text: text}),
     });
-    const result = await response.json();
+    const result = await this.jsonOrErrors(response);
     return result.note;
   }
   async updateNote(id, text){
@@ -43,7 +66,7 @@ class _Api {
       },
       body: JSON.stringify({text: text}),
     });
-    const result = await response.json();
+    const result = await this.jsonOrErrors(response);
     return result.note;
   }
   async deleteNote(id){
@@ -53,7 +76,7 @@ class _Api {
         'apikey': this.apikey,
       },
     });
-    const result = await response.json();
+    const result = await this.jsonOrErrors(response);
     return result.notes;
   }
 }
