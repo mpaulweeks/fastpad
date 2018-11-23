@@ -7,11 +7,13 @@ import {
   Button,
   StyleSheet,
 } from 'react-native';
-import { NavigationEvents } from "react-navigation";
+import { NavigationEvents } from 'react-navigation';
 
+import { sortNotes } from '../utils';
 import DataStore from '../utils/DataStore';
 
 import Colors from '../constants/Colors';
+import ListNote from '../components/ListNote';
 import Thinking from '../components/Thinking';
 import { setThinking, setEditorNote } from '../redux/actions';
 
@@ -81,33 +83,17 @@ class ListNotesScreen extends React.Component {
     return (
       <View style={styles.container}>
         <NavigationEvents onWillFocus={this._fetchNotes}/>
-        {notes && (
-          <ScrollView style={styles.scroll}>
-            {notes.map((n, i) => {
-              const isEmpty = !n.text;
-              const preview = isEmpty ? '(empty)' : n.text.split('\n')[0].substring(0, 100);
-              const previewStyle = isEmpty ? styles.empty : styles.preview;
-              return (
-                <View style={styles.row} key={'note-'+i}>
-                  <Text style={styles.id}>
-                    {n.id}
-                  </Text>
-                  <Text
-                    style={previewStyle}
-                    onPress={() => this._editNote(n)}
-                  >
-                    {preview}
-                  </Text>
-                  <Button
-                    style={styles.delete}
-                    onPress={() => this._deleteNote(n.id)}
-                    title="delete"
-                  />
-                </View>
-              );
-            })}
-          </ScrollView>
-        )}
+        <ScrollView style={styles.scroll}>
+          {sortNotes(notes).map((n, i) => (
+            <ListNote
+              key={'note-'+i}
+              index={i}
+              note={n}
+              doEdit={() => this._editNote(n)}
+              doDelete={() => this._deleteNote(n.id)}
+            />
+          ))}
+        </ScrollView>
         <Thinking />
       </View>
     );
@@ -120,25 +106,7 @@ const styles = StyleSheet.create({
   },
   scroll: {
     flex: 1,
-    paddingTop: 15,
     backgroundColor: '#fff',
-  },
-  row: {
-    height: 100,
-    borderBottomColor: '#666666',
-    borderBottomWidth: 2,
-  },
-  id: {
-    color: 'blue',
-  },
-  preview: {
-    color: '#666666',
-  },
-  empty: {
-    color: 'salmon',
-  },
-  delete: {
-    color: 'red',
   },
 });
 

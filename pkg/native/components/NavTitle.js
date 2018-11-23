@@ -12,7 +12,7 @@ import { setEditorFocus } from '../redux/actions';
 class NavTitle extends React.Component {
   render() {
     const { note } = this.props;
-    const title = (note && note.created) ? prettyUTC(note.created) : 'draft';
+    const title = (note && note.created) ? prettyUTC(note.created) : 'Unsaved Draft';
     return (
       <Text style={styles.title}>
         {title}
@@ -24,6 +24,7 @@ class NavTitle extends React.Component {
 const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
+    color: Colors.noteCreated,
   },
 });
 

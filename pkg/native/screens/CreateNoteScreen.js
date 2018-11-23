@@ -6,7 +6,7 @@ import {
   Button,
   StyleSheet,
 } from 'react-native';
-import { NavigationEvents } from "react-navigation";
+import { NavigationEvents } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 import NavTitle from '../components/NavTitle';

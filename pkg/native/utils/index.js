@@ -1,4 +1,4 @@
-export const prettyUTC = (utcStr) => {
+export const prettyUTC = utcStr => {
   const dateObj = new Date(utcStr);
   let ampm = 'am';
   let h = dateObj.getHours();
@@ -17,4 +17,20 @@ export const prettyUTC = (utcStr) => {
     s = '0' + s;
   }
   return `${dateObj.toLocaleDateString()} ${h}:${m} ${ampm}`;
+}
+
+export const sortNotes = notes => {
+  if (!notes) {
+    return [];
+  }
+  function compare(a,b) {
+    if (a.created < b.created) {
+      return -1;
+    }
+    if (a.created > b.created) {
+      return 1;
+    }
+    return 0;
+  }
+  return notes.sort(compare).reverse();
 }
