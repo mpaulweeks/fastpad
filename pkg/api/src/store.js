@@ -115,7 +115,7 @@ async function updateNote(apikey, id, text) {
   const user = await loadUser(apikey);
   let newNote;
   user.notes.forEach((note, index) => {
-    if (note.id = id) {
+    if (note.id === id) {
       newNote = {
         ...note,
         text: text,

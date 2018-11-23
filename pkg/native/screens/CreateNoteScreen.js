@@ -34,8 +34,9 @@ export default class CreateNoteScreen extends React.Component {
   _resetNote = () => {
     this.setState({
       note: {
-        id: new Date().getTime(),
-        text: '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4',
+        _key: new Date().getTime(),
+        text: '',
+        // text: '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4',
       },
     }, () => {
       // to remount Editor
@@ -55,7 +56,9 @@ export default class CreateNoteScreen extends React.Component {
     // todo read from local settings
     const userStyles = {};
 
-
+    const toEdit = {
+      ...note,
+    };
     return (
       <View style={styles.container}>
         <NavigationEvents onWillFocus={this._focusNote}/>
@@ -63,7 +66,7 @@ export default class CreateNoteScreen extends React.Component {
         {note && (
           <NoteEditor
             ref={r => this.editor = r}
-            note={note}
+            note={toEdit}
             userStyles={userStyles}
           />
         )}

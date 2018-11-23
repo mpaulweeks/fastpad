@@ -6,10 +6,10 @@ import {
   Button,
   StyleSheet,
 } from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
+import { NavigationEvents } from "react-navigation";
 
 import Thinking from '../components/Thinking';
-import Api from '../utils/Api';
+import DataStore from '../utils/DataStore';
 
 export default class ListNotesScreen extends React.Component {
   static navigationOptions = {
@@ -17,36 +17,41 @@ export default class ListNotesScreen extends React.Component {
   };
   state = {
     notes: null,
-    thinking: true,
+    thinking: false,
   };
 
   componentDidMount(){
     this._fetchNotes();
   }
-  _fetchNotes(){
-    Api.getNotes().then(notes => {
-      this.setState({
-        notes: notes,
-        thinking: false,
-      });
-    });
-  }
-  _deleteNote(id){
+  _fetchNotes = () => {
+    if (this.state.thinking){
+      return;
+    }
     this.setState({
       thinking: true,
-    });
-    Api.deleteNote(id).then(notes => {
+    }, () => DataStore.getNotes().then(notes => {
       this.setState({
         notes: notes,
         thinking: false,
       });
-    });
+    }));
+  }
+  _deleteNote = id => {
+    this.setState({
+      thinking: true,
+    }, () => DataStore.deleteNote(id).then(notes => {
+      this.setState({
+        notes: notes,
+        thinking: false,
+      });
+    }));
   }
 
   render() {
     const { notes, thinking } = this.state;
     return (
       <View style={styles.container}>
+        <NavigationEvents onWillFocus={this._fetchNotes}/>
         {notes && (
           <ScrollView style={styles.scroll}>
             {notes.map((n, i) => {
@@ -92,7 +97,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
   },
   id: {
-    color: 'lightblue',
+    color: 'blue',
   },
   preview: {
     color: '#666666',

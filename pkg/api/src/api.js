@@ -35,21 +35,19 @@ app.get('/notes', wrap((req, res) => {
 app.post('/notes', wrap((req, res) => {
   const apikey = req.get('apikey');
   const text = req.body.text;
-  return store.addNote(apikey, text).then(result => {
+  return store.addNote(apikey, text).then(note => {
     res.send(JSON.stringify({
-      result: result,
+      note: note,
     }));
   });
 }));
 app.patch('/notes/:id', wrap((req, res) => {
   const apikey = req.get('apikey');
   const id = parseFloat(req.params.id);
-  const newNote = {
-    text: req.body.text,
-  };
-  return store.updateNote(apikey, id, newNote).then(result => {
+  const text = req.body.text;
+  return store.updateNote(apikey, id, text).then(note => {
     res.send(JSON.stringify({
-      result: result,
+      note: note,
     }));
   });
 }));
