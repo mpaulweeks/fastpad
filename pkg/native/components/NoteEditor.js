@@ -19,6 +19,7 @@ class NoteEditor extends React.Component {
     editTimeout: null,
   };
 
+  // managing focus
   componentDidUpdate(prevProps) {
     const { focused, note } = this.props;
     if (focused !== prevProps.focused) {
@@ -29,25 +30,32 @@ class NoteEditor extends React.Component {
       }
     }
   }
+  _toggleEdit = () => {
+    this.props.dispatch(setEditorFocus(!this.props.focused));
+  }
+  onFocus = () => {
+    this.props.dispatch(setEditorFocus(true));
+  }
+  onBlur = () => {
+    this.props.dispatch(setEditorFocus(false));
+    this.saveNote();
+  }
 
   // text editing
   _handleTextChange = async (newText) => {
-    clearTimeout(this.state.editTimeout);
-    const newTimeout = setTimeout(() => {
-      this.saveNote();
-    }, 10 * 1000);
-
     const newNote = {
       ...this.props.note,
       text: newText,
     };
     await this.props.dispatch(setEditorNote(newNote));
+
+    clearTimeout(this.state.editTimeout);
+    const newTimeout = setTimeout(() => {
+      this.saveNote();
+    }, 10 * 1000);
     this.setState({
       editTimeout: newTimeout,
     });
-  }
-  _toggleEdit = () => {
-    this.props.dispatch(setEditorFocus(!this.props.focused));
   }
   saveNote = async (exiting) => {
     // clear potentially waiting save
@@ -69,17 +77,6 @@ class NoteEditor extends React.Component {
       // delete empty note
       DataStore.deleteNote(note.id);
     }
-  }
-
-  focusNote = () => {
-    this.props.dispatch(setEditorFocus(true));
-  }
-  onFocus = () => {
-    this.props.dispatch(setEditorFocus(true));
-  }
-  onBlur = () => {
-    this.props.dispatch(setEditorFocus(false));
-    this.saveNote();
   }
 
   render() {
