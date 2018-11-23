@@ -4,8 +4,8 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import NewNoteScreen from '../screens/NewNoteScreen';
-import NotesScreen from '../screens/NotesScreen';
+import CreateNoteScreen from '../screens/CreateNoteScreen';
+import ListNotesScreen from '../screens/ListNotesScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const HomeStack = createStackNavigator({
@@ -26,12 +26,12 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const EditStack = createStackNavigator({
-  Edit: NewNoteScreen,
+const CreateNoteStack = createStackNavigator({
+  Create: CreateNoteScreen,
 });
 
-EditStack.navigationOptions = {
-  tabBarLabel: 'Edit',
+CreateNoteStack.navigationOptions = {
+  tabBarLabel: 'New',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -40,11 +40,11 @@ EditStack.navigationOptions = {
   ),
 };
 
-const NotesStack = createStackNavigator({
-  Notes: NotesScreen,
+const ListNotesStack = createStackNavigator({
+  ListNotes: ListNotesScreen,
 });
 
-NotesStack.navigationOptions = {
+ListNotesStack.navigationOptions = {
   tabBarLabel: 'Notes',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -69,8 +69,8 @@ SettingsStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
-  NotesStack,
-  EditStack,
+  ListNotesStack,
+  CreateNoteStack,
   HomeStack,
   SettingsStack,
 });

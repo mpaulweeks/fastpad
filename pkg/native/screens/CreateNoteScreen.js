@@ -8,7 +8,7 @@ import { NavigationEvents } from "react-navigation";
 
 import NoteEditor from '../components/NoteEditor';
 
-export default class NewNoteScreen extends React.Component {
+export default class CreateNoteScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };

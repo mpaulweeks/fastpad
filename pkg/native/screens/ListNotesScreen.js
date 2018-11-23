@@ -11,7 +11,7 @@ import { ExpoLinksView } from '@expo/samples';
 import Thinking from '../components/Thinking';
 import Api from '../utils/Api';
 
-export default class NotesScreen extends React.Component {
+export default class ListNotesScreen extends React.Component {
   static navigationOptions = {
     title: 'Notes',
   };
