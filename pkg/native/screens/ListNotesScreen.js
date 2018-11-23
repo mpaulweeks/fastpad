@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import { NavigationEvents } from "react-navigation";
 
-import Thinking from '../components/Thinking';
 import DataStore from '../utils/DataStore';
 
+import Thinking from '../components/Thinking';
 import { setThinking } from '../redux/actions';
 
 class ListNotesScreen extends React.Component {
@@ -53,7 +53,6 @@ class ListNotesScreen extends React.Component {
   }
 
   render() {
-    const { thinking } = this.props;
     const { notes } = this.state;
     return (
       <View style={styles.container}>
@@ -82,7 +81,7 @@ class ListNotesScreen extends React.Component {
             })}
           </ScrollView>
         )}
-        <Thinking visible={thinking}/>
+        <Thinking />
       </View>
     );
   }

@@ -35,7 +35,7 @@ class CreateNoteScreen extends React.Component {
   _resetNote = () => {
     this.props.dispatch(setEditorNote({
       id: null,
-      text: 'sample text ' + new Date().getTime(),
+      text: '',
     }));
   }
   _focusNote = () => {

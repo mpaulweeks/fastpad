@@ -28,7 +28,7 @@ class Thinking extends React.Component {
       <Modal
         animationType="fade"
         transparent={true}
-        visible={this.props.visible}
+        visible={this.props.thinking}
       >
         <View style={styles.modalContainer}>
           <View style={styles.innerContainer}>
@@ -42,4 +42,10 @@ class Thinking extends React.Component {
   }
 }
 
-export default connect()(Thinking);
+const mapStateToProps = state => ({
+  thinking: state.thinking,
+});
+
+export default connect(
+  mapStateToProps,
+)(Thinking);
