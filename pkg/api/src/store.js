@@ -135,7 +135,7 @@ async function updateNote(apikey, id, text) {
 async function deleteNote(apikey, id) {
   const user = await loadUser(apikey);
   const newNotes = user.notes.filter(note => note.id !== id);
-  if (newNote.length < user.notes.length){
+  if (newNotes.length < user.notes.length){
     user.notes = newNotes;
     const success = await saveUser(apikey, user);
     return newNotes;

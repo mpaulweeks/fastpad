@@ -34,13 +34,13 @@ class _Api {
     const result = await response.json();
     return result;
   }
-  async deleteNote(id, text){
+  async deleteNote(id){
     const response = await fetch(`${baseUrl}/notes/${id}`, {
       headers: {'apikey': this.apikey},
       method: 'DELETE',
     });
     const result = await response.json();
-    return result;
+    return result.notes;
   }
 }
 

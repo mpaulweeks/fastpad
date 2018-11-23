@@ -34,7 +34,7 @@ app.get('/notes', wrap((req, res) => {
 }));
 app.post('/notes', wrap((req, res) => {
   const apikey = req.get('apikey');
-  const { text } = req.body;
+  const text = req.body.text;
   return store.addNote(apikey, text).then(result => {
     res.send(JSON.stringify({
       result: result,
@@ -43,7 +43,7 @@ app.post('/notes', wrap((req, res) => {
 }));
 app.patch('/notes/:id', wrap((req, res) => {
   const apikey = req.get('apikey');
-  const { id } = req.params;
+  const id = parseFloat(req.params.id);
   const newNote = {
     text: req.body.text,
   };
@@ -55,7 +55,7 @@ app.patch('/notes/:id', wrap((req, res) => {
 }));
 app.delete('/notes/:id', wrap((req, res) => {
   const apikey = req.get('apikey');
-  const { id } = req.params;
+  const id = parseFloat(req.params.id);
   return store.deleteNote(apikey, id).then(result => {
     res.send(JSON.stringify({
       notes: result,
@@ -107,6 +107,7 @@ app.get('/', wrap((req, res) => {
 // handle errors
 
 app.use(function (err, req, res, next) {
+  console.log(req.originalUrl);
   if (err.code) {
     res.status(err.code);
   } else {

@@ -3,6 +3,7 @@ import {
   ScrollView,
   View,
   Text,
+  Button,
   StyleSheet,
 } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
@@ -34,8 +35,11 @@ export default class NotesScreen extends React.Component {
     this.setState({
       thinking: true,
     });
-    Api.deleteNote().then(() => {
-      this._fetchNotes();
+    Api.deleteNote(id).then(notes => {
+      this.setState({
+        notes: notes,
+        thinking: false,
+      });
     });
   }
 
@@ -57,6 +61,11 @@ export default class NotesScreen extends React.Component {
                   <Text style={previewStyle}>
                     {preview}
                   </Text>
+                  <Button
+                    style={styles.delete}
+                    onPress={() => this._deleteNote(n.id)}
+                    title="delete"
+                  />
                 </View>
               );
             })}
@@ -90,5 +99,8 @@ const styles = StyleSheet.create({
   },
   empty: {
     color: 'salmon',
+  },
+  delete: {
+    color: 'red',
   },
 });
