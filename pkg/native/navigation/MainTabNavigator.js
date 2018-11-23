@@ -27,7 +27,7 @@ HomeStack.navigationOptions = {
 };
 
 const CreateNoteStack = createStackNavigator({
-  Create: CreateNoteScreen,
+  CreateNote: CreateNoteScreen,
 });
 
 CreateNoteStack.navigationOptions = {
@@ -69,8 +69,8 @@ SettingsStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
-  ListNotesStack,
   CreateNoteStack,
+  ListNotesStack,
   HomeStack,
   SettingsStack,
 });
