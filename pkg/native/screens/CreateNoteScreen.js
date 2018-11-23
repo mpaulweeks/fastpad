@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   AppState,
   View,
@@ -8,7 +9,7 @@ import { NavigationEvents } from "react-navigation";
 
 import NoteEditor from '../components/NoteEditor';
 
-export default class CreateNoteScreen extends React.Component {
+class CreateNoteScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -81,3 +82,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
   },
 });
+
+export default connect()(CreateNoteScreen);

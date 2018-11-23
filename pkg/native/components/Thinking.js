@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   View,
   Modal,
@@ -6,7 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-export default class Thinking extends React.Component {
+class Thinking extends React.Component {
   render() {
     const styles = StyleSheet.create({
       modalContainer: {
@@ -40,3 +41,5 @@ export default class Thinking extends React.Component {
     );
   }
 }
+
+export default connect()(Thinking);

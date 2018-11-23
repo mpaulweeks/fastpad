@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   ScrollView,
   View,
@@ -11,44 +12,49 @@ import { NavigationEvents } from "react-navigation";
 import Thinking from '../components/Thinking';
 import DataStore from '../utils/DataStore';
 
-export default class ListNotesScreen extends React.Component {
+import { setThinking } from '../redux/actions';
+
+class ListNotesScreen extends React.Component {
   static navigationOptions = {
     title: 'Notes',
   };
   state = {
     notes: null,
-    thinking: false,
   };
 
   componentDidMount(){
     this._fetchNotes();
   }
-  _fetchNotes = () => {
-    if (this.state.thinking){
+  _fetchNotes = async () => {
+    const {thinking, dispatch} = this.props;
+    if (thinking){
       return;
     }
+
+    await dispatch(setThinking(true))
+    const notes = await DataStore.getNotes();
     this.setState({
-      thinking: true,
-    }, () => DataStore.getNotes().then(notes => {
-      this.setState({
-        notes: notes,
-        thinking: false,
-      });
-    }));
+      notes: notes,
+    });
+    await dispatch(setThinking(false));
   }
-  _deleteNote = id => {
+  _deleteNote = async (id) => {
+    const {thinking, dispatch} = this.props;
+    if (thinking){
+      return;
+    }
+
+    await dispatch(setThinking(true))
+    const notes = await DataStore.deleteNote(id);
     this.setState({
-      thinking: true,
-    }, () => DataStore.deleteNote(id).then(notes => {
-      this.setState({
-        notes: notes,
-        thinking: false,
-      });
-    }));
+      notes: notes,
+    });
+    await dispatch(setThinking(false));
   }
 
   render() {
-    const { notes, thinking } = this.state;
+    const { thinking } = this.props;
+    const { notes } = this.state;
     return (
       <View style={styles.container}>
         <NavigationEvents onWillFocus={this._fetchNotes}/>
@@ -109,3 +115,11 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 });
+
+const mapStateToProps = state => ({
+  thinking: state.thinking,
+});
+
+export default connect(
+  mapStateToProps,
+)(ListNotesScreen);

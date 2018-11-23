@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   TextInput,
   StyleSheet,
@@ -10,7 +11,7 @@ import {
 
 import DataStore from '../utils/DataStore';
 
-export default class NoteEditor extends React.Component {
+class NoteEditor extends React.Component {
   input = null;
   state = {
     note: null,
@@ -152,3 +153,5 @@ export default class NoteEditor extends React.Component {
     );
   }
 }
+
+export default connect()(NoteEditor);
