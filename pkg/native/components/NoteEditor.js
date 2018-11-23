@@ -40,9 +40,12 @@ export default class NoteEditor extends React.Component {
       editTimeout: newTimeout,
     });
   }
-  _defocus = () => {
-    console.log('trying to defocus');
-    this.input && this.input.blur();
+  _toggleEdit = () => {
+    if (this.state.focused){
+      this.input && this.input.blur();
+    } else {
+      this.focusNote();
+    }
   }
   saveNote = exiting => {
     // clear potentially waiting save
@@ -91,23 +94,9 @@ export default class NoteEditor extends React.Component {
         color: '#000000',
       },
       header: {
-        paddingTop: 35, // header
+        paddingTop: 45, // header
         width: '100%',
         padding: 5,
-      },
-      key: {
-        padding: 5,
-        fontSize: 16,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        color: 'lightblue',
-      },
-      id: {
-        padding: 5,
-        fontSize: 16,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        color: 'blue',
       },
       done: {
         padding: 5,
@@ -128,25 +117,15 @@ export default class NoteEditor extends React.Component {
         height: 200,
       },
     });
-    const { note } = this.state;
+    const { note, focused } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.header}>
           <Text
-            style={styles.key}
-          >
-            {note && note._key}
-          </Text>
-          <Text
-            style={styles.id}
-          >
-            {note && note.id}
-          </Text>
-          <Text
             style={styles.done}
-            onPress={this._defocus}
+            onPress={this._toggleEdit}
           >
-            done
+            {focused ? 'done' : 'edit'}
           </Text>
         </View>
         {note ? (
