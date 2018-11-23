@@ -12,7 +12,7 @@ import { NavigationEvents } from "react-navigation";
 import DataStore from '../utils/DataStore';
 
 import Thinking from '../components/Thinking';
-import { setThinking } from '../redux/actions';
+import { setThinking, setEditorNote } from '../redux/actions';
 
 class ListNotesScreen extends React.Component {
   static navigationOptions = {
@@ -26,12 +26,8 @@ class ListNotesScreen extends React.Component {
     this._fetchNotes();
   }
   _fetchNotes = async () => {
-    const {thinking, dispatch} = this.props;
-    if (thinking){
-      return;
-    }
-
-    await dispatch(setThinking(true))
+    const { dispatch } = this.props;
+    await dispatch(setThinking(true));
     const notes = await DataStore.getNotes();
     this.setState({
       notes: notes,
@@ -39,17 +35,18 @@ class ListNotesScreen extends React.Component {
     await dispatch(setThinking(false));
   }
   _deleteNote = async (id) => {
-    const {thinking, dispatch} = this.props;
-    if (thinking){
-      return;
-    }
-
-    await dispatch(setThinking(true))
+    const { dispatch } = this.props;
+    await dispatch(setThinking(true));
     const notes = await DataStore.deleteNote(id);
     this.setState({
       notes: notes,
     });
     await dispatch(setThinking(false));
+  }
+  _editNote = async (note) => {
+    const { dispatch } = this.props;
+    await dispatch(setEditorNote(note));
+    this.props.navigation.navigate('CreateNote');
   }
 
   render() {
@@ -68,7 +65,10 @@ class ListNotesScreen extends React.Component {
                   <Text style={styles.id}>
                     {n.id}
                   </Text>
-                  <Text style={previewStyle}>
+                  <Text
+                    style={previewStyle}
+                    onPress={() => this._editNote(n)}
+                  >
                     {preview}
                   </Text>
                   <Button

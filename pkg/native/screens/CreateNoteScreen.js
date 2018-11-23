@@ -20,30 +20,37 @@ class CreateNoteScreen extends React.Component {
   // mounting and unmounting
   componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange);
-    this._resetNote();
   }
   componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
-  _handleAppStateChange = (nextAppState) => {
+  _handleAppStateChange = async (nextAppState) => {
     console.log('new AppState:', nextAppState);
     if (nextAppState === 'active') {
-      this._focusNote();
+      // coming back from sleep
+      this.props.navigation.navigate('CreateNote');
+      await this._resetNote();
+      await this._focusNote();
+    }
+  }
+  _onNav = async () => {
+    if (!this.props.editor.note) {
+      await this._resetNote();
+      await this._focusNote();
     }
   }
 
   _resetNote = () => {
-    this.props.dispatch(setEditorNote({
+    return this.props.dispatch(setEditorNote({
       id: null,
       text: '',
     }));
   }
   _focusNote = () => {
-    this._resetNote();
-    this.props.dispatch(setEditorFocus(true));
+    return this.props.dispatch(setEditorFocus(true));
   }
-
-  _gotoListNotesScreen = () => {
+  _gotoListNotesScreen = async () => {
+    await this.props.dispatch(setEditorFocus(false));
     this.props.navigation.navigate('ListNotes');
   }
 
@@ -53,7 +60,7 @@ class CreateNoteScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <NavigationEvents onWillFocus={this._focusNote}/>
+        <NavigationEvents onWillFocus={this._onNav}/>
         <NoteEditor
           ref={r => this.editor = r}
           userStyles={userStyles}
@@ -88,4 +95,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(CreateNoteScreen);
+const mapStateToProps = state => ({
+  editor: state.editor,
+});
+export default connect(
+  mapStateToProps,
+)(CreateNoteScreen);

@@ -45,6 +45,7 @@ const MainNavigator = createMaterialTopTabNavigator(stacks, {
   initialRouteName: 'CreateNote',
   navigationOptions: {
     tabBarVisible: false,
+    lazy: true,
   },
 });
 
