@@ -3,6 +3,9 @@ import {
   fetchNotesBegin,
   fetchNotesSuccess,
   fetchNotesFailure,
+  deleteNoteBegin,
+  deleteNoteSuccess,
+  deleteNoteFailure,
 } from '../redux/actions';
 
 
@@ -44,6 +47,25 @@ class _Api {
       await dispatch(setThinking(false));
     }
   }
+  deleteNote(id){
+    return async (dispatch) => {
+      await dispatch(setThinking(true));
+      try {
+        await dispatch(deleteNoteBegin(id));
+        const response = await fetch(`${baseUrl}/notes/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'apikey': this.apikey,
+          },
+        });
+        await this.jsonOrErrors(response);
+        await dispatch(deleteNoteSuccess());
+      } catch (error) {
+        await dispatch(deleteNoteFailure(error));
+      }
+      await dispatch(this.fetchNotes());
+    }
+  }
 
   async createNote(text){
     const response = await fetch(`${baseUrl}/notes`, {
@@ -68,16 +90,6 @@ class _Api {
     });
     const result = await this.jsonOrErrors(response);
     return result.note;
-  }
-  async deleteNote(id){
-    const response = await fetch(`${baseUrl}/notes/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'apikey': this.apikey,
-      },
-    });
-    const result = await this.jsonOrErrors(response);
-    return result.notes;
   }
 }
 

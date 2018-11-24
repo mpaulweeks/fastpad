@@ -60,13 +60,7 @@ class ListNotesScreen extends React.Component {
     await this.props.dispatch(DataStore.fetchNotes());
   }
   _deleteNote = async (id) => {
-    const { dispatch } = this.props;
-    await dispatch(setThinking(true));
-    const notes = await DataStore.deleteNote(id);
-    this.setState({
-      notes: notes,
-    });
-    await dispatch(setThinking(false));
+    await this.props.dispatch(DataStore.deleteNote(id));
   }
 
   render() {

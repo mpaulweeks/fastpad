@@ -56,7 +56,7 @@ app.delete('/notes/:id', wrap((req, res) => {
   const id = parseFloat(req.params.id);
   return store.deleteNote(apikey, id).then(result => {
     res.send(JSON.stringify({
-      notes: result,
+      deleted: id,
     }));
   });
 }));
@@ -89,7 +89,7 @@ app.post('/apikey', wrap((req, res) => {
 app.get('/check', wrap((req, res) => {
   const username = req.body.username;
   return store.checkUsername(username).then(result => {
-    res.status(200);
+    res.status(204);
   });
 }));
 
