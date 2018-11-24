@@ -15,7 +15,7 @@ import DataStore from '../utils/DataStore';
 import Colors from '../constants/Colors';
 import ListNote from '../components/ListNote';
 import Thinking from '../components/Thinking';
-import { setThinking, setEditorNote } from '../redux/actions';
+import { setEditorNote } from '../redux/actions';
 
 class ListNotesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -61,6 +61,7 @@ class ListNotesScreen extends React.Component {
   }
   _deleteNote = async (id) => {
     await this.props.dispatch(DataStore.deleteNote(id));
+    this._fetchNotes();
   }
 
   render() {

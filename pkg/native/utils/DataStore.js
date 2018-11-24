@@ -63,7 +63,7 @@ class _Api {
       } catch (error) {
         await dispatch(deleteNoteFailure(error));
       }
-      await dispatch(this.fetchNotes());
+      await dispatch(setThinking(false));
     }
   }
 
