@@ -108,40 +108,32 @@ async function addNote(apikey, text) {
   return newNote;
 }
 
-async function updateNote(apikey, id, text) {
+async function upsertNote(apikey, id, text, created) {
   if (!text) {
     throw new exception.EmptyText();
   }
   const user = await loadUser(apikey);
-  let newNote;
-  user.notes.forEach((note, index) => {
-    if (note.id === id) {
-      newNote = {
-        ...note,
-        text: text,
-        updated: getNow(),
-      };
-      user.notes[index] = newNote;
-    }
-  });
-  if (newNote){
-    const success = await saveUser(apikey, user);
-    return newNote;
-  } else {
-    throw new exception.NoteNotFound();
-  }
+  const existingNote = user.notes.filter(note => note.id === id)[0] || {
+    created: getNow(),
+  };
+  const upsertNote = {
+    id: id,
+    text: text,
+    created: created || existingNote.created,
+    updated: getNow(),
+  };
+  const newNotes = user.notes.filter(note => note.id !== id).concat(upsertNote);
+  user.notes = newNotes;
+  const success = await saveUser(apikey, user);
+  return upsertNote;
 }
 
 async function deleteNote(apikey, id) {
   const user = await loadUser(apikey);
   const newNotes = user.notes.filter(note => note.id !== id);
-  if (newNotes.length < user.notes.length){
-    user.notes = newNotes;
-    const success = await saveUser(apikey, user);
-    return newNotes;
-  } else {
-    throw new exception.NoteNotFound();
-  }
+  user.notes = newNotes;
+  const success = await saveUser(apikey, user);
+  return newNotes;
 }
 
 async function changePassword(apikey, newPassword) {
@@ -156,7 +148,7 @@ module.exports = {
   createUser,
   getNotes,
   addNote,
-  updateNote,
+  upsertNote,
   deleteNote,
   changePassword,
 };

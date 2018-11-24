@@ -41,11 +41,12 @@ app.post('/notes', wrap((req, res) => {
     }));
   });
 }));
-app.patch('/notes/:id', wrap((req, res) => {
+app.put('/notes/:id', wrap((req, res) => {
   const apikey = req.get('apikey');
   const id = parseFloat(req.params.id);
   const text = req.body.text;
-  return store.updateNote(apikey, id, text).then(note => {
+  const created = req.body.created;
+  return store.upsertNote(apikey, id, text, created).then(note => {
     res.send(JSON.stringify({
       note: note,
     }));

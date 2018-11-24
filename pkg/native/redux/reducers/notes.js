@@ -1,12 +1,9 @@
 import {
   SET_EDITOR_NOTE,
   SET_EDITOR_FOCUS,
-  CREATE_NOTE_BEGIN,
-  CREATE_NOTE_SUCCESS,
-  CREATE_NOTE_FAILURE,
-  UPDATE_NOTE_BEGIN,
-  UPDATE_NOTE_SUCCESS,
-  UPDATE_NOTE_FAILURE,
+  UPSERT_NOTE_BEGIN,
+  UPSERT_NOTE_SUCCESS,
+  UPSERT_NOTE_FAILURE,
   FETCH_NOTES_BEGIN,
   FETCH_NOTES_SUCCESS,
   FETCH_NOTES_FAILURE,
@@ -18,10 +15,7 @@ import {
 const initialState = {
   editor: {
     focused: false,
-    note: {
-      id: null,
-      text: '',
-    },
+    note: null,
     saving: false,
     error: null,
   },
@@ -50,7 +44,7 @@ function appendList(state, newState){
     },
   };
 }
-function updateNotes(state){
+function copyEditorNote(state){
   return appendList(state, {
     notes: {
       ...state.list.notes,
@@ -72,23 +66,20 @@ export default function notesReducer(state = initialState, action) {
         focused: action.focused,
       });
 
-    case CREATE_NOTE_BEGIN:
-    case UPDATE_NOTE_BEGIN:
-      return updateNotes(appendEditor(state, {
+    case UPSERT_NOTE_BEGIN:
+      return copyEditorNote(appendEditor(state, {
         saving: true,
         error: null,
       }));
-    case CREATE_NOTE_SUCCESS:
-    case UPDATE_NOTE_SUCCESS:
-      return updateNotes(appendEditor(state, {
+    case UPSERT_NOTE_SUCCESS:
+      return copyEditorNote(appendEditor(state, {
         saving: false,
         note: {
           ...action.payload.note,
           text: state.editor.note.text,
         },
       }));
-    case CREATE_NOTE_FAILURE:
-    case UPDATE_NOTE_FAILURE:
+    case UPSERT_NOTE_FAILURE:
       return appendEditor(state, {
         saving: false,
         error: action.payload.error,

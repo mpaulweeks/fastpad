@@ -35,7 +35,7 @@ class NoteEditor extends React.Component {
   }
   onBlur = () => {
     this.props.dispatch(setEditorFocus(false));
-    this.saveNote();
+    this.saveNote(true);
   }
 
   // text editing
@@ -60,11 +60,8 @@ class NoteEditor extends React.Component {
 
     const { dispatch, note } = this.props;
     if (note.text) {
-      const newNote = await (note.id
-        ? dispatch(DataStore.updateNote(note.id, note.text))
-        : dispatch(DataStore.createNote(note.text))
-      );
-    } else if (exiting && note.id) {
+      const newNote = dispatch(DataStore.upsertNote(note));
+    } else if (exiting) {
       // delete empty note
       dispatch(DataStore.deleteNote(note.id));
     }

@@ -62,7 +62,8 @@ class CreateNoteScreen extends React.Component {
 
   _resetNote = () => {
     return this.props.dispatch(setEditorNote({
-      id: null,
+      id: new Date().getTime(),
+      created: new Date().toISOString(),
       text: '',
     }));
   }

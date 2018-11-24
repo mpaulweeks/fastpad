@@ -5,12 +5,9 @@ import {
   deleteNoteBegin,
   deleteNoteSuccess,
   deleteNoteFailure,
-  createNoteBegin,
-  createNoteSuccess,
-  createNoteFailure,
-  updateNoteBegin,
-  updateNoteSuccess,
-  updateNoteFailure,
+  upsertNoteBegin,
+  upsertNoteSuccess,
+  upsertNoteFailure,
 } from '../redux/actions';
 
 
@@ -66,31 +63,21 @@ class _Api {
     result => deleteNoteSuccess(),
     err => deleteNoteFailure(err),
   );
-  createNote = text => this.generateDispatcher(
-    () => createNoteBegin(text),
-    () => fetch(`${baseUrl}/notes`, {
-      method: 'POST',
+  upsertNote = note => this.generateDispatcher(
+    () => upsertNoteBegin(note),
+    () => fetch(`${baseUrl}/notes/${note.id}`, {
+      method: 'PUT',
       headers: {
         'apikey': this.apikey,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({text: text}),
+      body: JSON.stringify({
+        text: note.text,
+        created: note.created,
+      }),
     }),
-    result => createNoteSuccess(result.note),
-    err => createNoteFailure(err),
-  );
-  updateNote = (id, text) => this.generateDispatcher(
-    () => updateNoteBegin(id, text),
-    () => fetch(`${baseUrl}/notes/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'apikey': this.apikey,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({text: text}),
-    }),
-    result => updateNoteSuccess(result.note),
-    err => updateNoteFailure(err),
+    result => upsertNoteSuccess(result.note),
+    err => upsertNoteFailure(err),
   );
 }
 
