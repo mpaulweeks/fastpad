@@ -19,8 +19,8 @@ export const prettyUTC = utcStr => {
   return `${dateObj.toLocaleDateString()} ${h}:${m} ${ampm}`;
 }
 
-export const sortNotes = notes => {
-  if (!notes) {
+export const sortNotes = notesObj => {
+  if (!notesObj) {
     return [];
   }
 
@@ -33,6 +33,13 @@ export const sortNotes = notes => {
     }
     return 0;
   }
-  const notesArr = Object.keys(notes).map(k => notes[k]);
+  const notesArr = Object.keys(notesObj).map(k => notesObj[k]);
   return notesArr.sort(compare).reverse();
+}
+
+export const convertNotesToObj = notesArr => {
+  return notesArr.reduce((obj, note) => {
+    obj[note.id] = note;
+    return obj;
+  }, {});
 }

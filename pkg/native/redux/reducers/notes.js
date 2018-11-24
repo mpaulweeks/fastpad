@@ -12,6 +12,8 @@ import {
   DELETE_NOTE_FAILURE,
 } from '../actions';
 
+import { sortNotes, convertNotesToObj } from '../../utils';
+
 const initialState = {
   editor: {
     focused: false,
@@ -85,29 +87,36 @@ export default function notesReducer(state = initialState, action) {
         error: action.payload.error,
       });
 
-
-    case FETCH_NOTES_BEGIN:
     case DELETE_NOTE_BEGIN:
       return appendList(state, {
         loading: true,
         error: null,
-      });
-
-    case FETCH_NOTES_SUCCESS:
-      return appendList(state, {
-        loading: false,
-        notes: action.payload.notes.reduce((obj, note) => {
-          obj[note.id] = note;
-          return obj;
-        }, {}),
+        notes: convertNotesToObj(
+          sortNotes(state.list.notes)
+            .filter(note => note.id !== action.payload.id)
+        ),
       });
     case DELETE_NOTE_SUCCESS:
       return appendList(state, {
         loading: false,
       });
-
-    case FETCH_NOTES_FAILURE:
     case DELETE_NOTE_FAILURE:
+      return appendList(state, {
+        loading: false,
+        error: action.payload.error,
+      });
+
+    case FETCH_NOTES_BEGIN:
+      return appendList(state, {
+        loading: true,
+        error: null,
+      });
+    case FETCH_NOTES_SUCCESS:
+      return appendList(state, {
+        loading: false,
+        notes: convertNotesToObj(action.payload.notes),
+      });
+    case FETCH_NOTES_FAILURE:
       return appendList(state, {
         loading: false,
         error: action.payload.error,

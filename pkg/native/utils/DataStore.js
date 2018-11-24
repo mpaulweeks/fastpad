@@ -30,12 +30,17 @@ class _Api {
   }
   generateDispatcher = (begin, fetch, success, failure) => {
     return async (dispatch) => {
+      console.log('datastore is dispatching');
       try {
         await dispatch(begin());
+        console.log('datastore is fetching');
         const response = await fetch();
+        console.log(response.url);
         const result = await this.jsonOrErrors(response);
         await dispatch(success(result));
       } catch (error) {
+        console.log('datastore error');
+        console.log(error);
         await dispatch(failure(error));
       }
     }
@@ -53,7 +58,7 @@ class _Api {
     err => fetchNotesFailure(err),
   );
   deleteNote = id => this.generateDispatcher(
-    () => deleteNoteBegin(),
+    () => deleteNoteBegin(id),
     () => fetch(`${baseUrl}/notes/${id}`, {
       method: 'DELETE',
       headers: {
