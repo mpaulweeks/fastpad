@@ -1,4 +1,3 @@
-export const SET_THINKING        = 'SET_THINKING';
 export const SET_EDITOR_NOTE     = 'SET_EDITOR_NOTE';
 export const SET_EDITOR_FOCUS    = 'SET_EDITOR_FOCUS';
 export const FETCH_NOTES_BEGIN   = 'FETCH_NOTES_BEGIN';
@@ -7,11 +6,6 @@ export const FETCH_NOTES_FAILURE = 'FETCH_NOTES_FAILURE';
 export const DELETE_NOTE_BEGIN   = 'DELETE_NOTE_BEGIN';
 export const DELETE_NOTE_SUCCESS = 'DELETE_NOTE_SUCCESS';
 export const DELETE_NOTE_FAILURE = 'DELETE_NOTE_FAILURE';
-
-export const setThinking = thinking => ({
-  type: SET_THINKING,
-  thinking,
-});
 
 export const setEditorNote = note => ({
   type: SET_EDITOR_NOTE,

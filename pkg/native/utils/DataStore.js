@@ -1,5 +1,4 @@
 import {
-  setThinking,
   fetchNotesBegin,
   fetchNotesSuccess,
   fetchNotesFailure,
@@ -30,7 +29,6 @@ class _Api {
   fetchNotes(){
     return async (dispatch) => {
       let notes = null;
-      await dispatch(setThinking(true));
       try {
         await dispatch(fetchNotesBegin());
         const response = await fetch(`${baseUrl}/notes`, {
@@ -44,12 +42,10 @@ class _Api {
       } catch (error) {
         await dispatch(fetchNotesFailure(error));
       }
-      await dispatch(setThinking(false));
     }
   }
   deleteNote(id){
     return async (dispatch) => {
-      await dispatch(setThinking(true));
       try {
         await dispatch(deleteNoteBegin(id));
         const response = await fetch(`${baseUrl}/notes/${id}`, {
@@ -63,7 +59,6 @@ class _Api {
       } catch (error) {
         await dispatch(deleteNoteFailure(error));
       }
-      await dispatch(setThinking(false));
     }
   }
 

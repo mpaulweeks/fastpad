@@ -65,7 +65,7 @@ class ListNotesScreen extends React.Component {
   }
 
   render() {
-    const { notes } = this.props;
+    const { notes, loading } = this.props;
     return (
       <View style={styles.container}>
         <NavigationEvents onWillFocus={this._fetchNotes}/>
@@ -80,7 +80,7 @@ class ListNotesScreen extends React.Component {
             />
           ))}
         </ScrollView>
-        <Thinking />
+        <Thinking visible={loading}/>
       </View>
     );
   }
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
   notes: state.notes.items,
-  thinking: state.thinking,
+  loading: state.notes.loading,
 });
 
 export default connect(

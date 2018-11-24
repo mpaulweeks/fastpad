@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   View,
   Modal,
@@ -28,7 +27,7 @@ class Thinking extends React.Component {
       <Modal
         animationType="fade"
         transparent={true}
-        visible={this.props.thinking}
+        visible={this.props.visible}
       >
         <View style={styles.modalContainer}>
           <View style={styles.innerContainer}>
@@ -42,10 +41,4 @@ class Thinking extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  thinking: state.thinking,
-});
-
-export default connect(
-  mapStateToProps,
-)(Thinking);
+export default Thinking;
