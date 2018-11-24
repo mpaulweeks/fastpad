@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  notes: state.notes.items,
-  loading: state.notes.loading,
+  notes: state.listNotes.notes,
+  loading: state.listNotes.loading,
 });
 
 export default connect(

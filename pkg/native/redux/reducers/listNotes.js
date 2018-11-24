@@ -8,12 +8,12 @@ import {
 } from '../actions';
 
 const initialState = {
-  items: [],
+  notes: [],
   loading: false,
   error: null,
 };
 
-export default function notesReducer(state = initialState, action) {
+export default function listReducer(state = initialState, action) {
   switch(action.type) {
     case FETCH_NOTES_BEGIN:
       // Mark the state as "loading" so we can show a spinner or something
@@ -30,7 +30,7 @@ export default function notesReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        items: action.payload.notes,
+        notes: action.payload.notes,
       };
 
     case FETCH_NOTES_FAILURE:
@@ -43,7 +43,7 @@ export default function notesReducer(state = initialState, action) {
         ...state,
         loading: false,
         error: action.payload.error,
-        items: [],
+        notes: [],
       };
 
     case DELETE_NOTE_BEGIN:
