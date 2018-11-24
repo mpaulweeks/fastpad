@@ -5,6 +5,12 @@ import {
   deleteNoteBegin,
   deleteNoteSuccess,
   deleteNoteFailure,
+  createNoteBegin,
+  createNoteSuccess,
+  createNoteFailure,
+  updateNoteBegin,
+  updateNoteSuccess,
+  updateNoteFailure,
 } from '../redux/actions';
 
 
@@ -62,29 +68,43 @@ class _Api {
     }
   }
 
-  async createNote(text){
-    const response = await fetch(`${baseUrl}/notes`, {
-      method: 'POST',
-      headers: {
-        'apikey': this.apikey,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({text: text}),
-    });
-    const result = await this.jsonOrErrors(response);
-    return result.note;
+  createNote(text){
+    return async (dispatch) => {
+      try {
+        await dispatch(createNoteBegin(text));
+        const response = await fetch(`${baseUrl}/notes`, {
+          method: 'POST',
+          headers: {
+            'apikey': this.apikey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({text: text}),
+        });
+        const result = await this.jsonOrErrors(response);
+        await dispatch(createNoteSuccess(result.note));
+      } catch (error) {
+        await dispatch(createNoteFailure(error));
+      }
+    }
   }
-  async updateNote(id, text){
-    const response = await fetch(`${baseUrl}/notes/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'apikey': this.apikey,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({text: text}),
-    });
-    const result = await this.jsonOrErrors(response);
-    return result.note;
+  updateNote(id, text){
+    return async (dispatch) => {
+      try {
+        await dispatch(updateNoteBegin(id, text));
+        const response = await fetch(`${baseUrl}/notes/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': this.apikey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({text: text}),
+        });
+        const result = await this.jsonOrErrors(response);
+        await dispatch(updateNoteSuccess(result.note));
+      } catch (error) {
+        await dispatch(updateNoteFailure(error));
+      }
+    }
   }
 }
 

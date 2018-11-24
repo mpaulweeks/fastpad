@@ -58,21 +58,15 @@ class NoteEditor extends React.Component {
     // clear potentially waiting save
     clearTimeout(this.state.editTimeout);
 
-    const { note } = this.props;
-
-    console.log('saving: ', note);
+    const { dispatch, note } = this.props;
     if (note.text) {
       const newNote = await (note.id
-        ? DataStore.updateNote(note.id, note.text)
-        : DataStore.createNote(note.text)
+        ? dispatch(DataStore.updateNote(note.id, note.text))
+        : dispatch(DataStore.createNote(note.text))
       );
-      await this.props.dispatch(setEditorNote({
-        ...note,
-        ...newNote,
-      }));
     } else if (exiting && note.id) {
       // delete empty note
-      DataStore.deleteNote(note.id);
+      dispatch(DataStore.deleteNote(note.id));
     }
   }
 
