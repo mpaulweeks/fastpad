@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  note: state.editor.note,
+  note: state.notes.editor.note,
 });
 export default connect(
   mapStateToProps,

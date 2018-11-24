@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux';
-import editor from './editor';
-import listNotes from './listNotes';
+import notes from './notes';
 
 export default combineReducers({
-  editor,
-  listNotes,
+  notes,
 });

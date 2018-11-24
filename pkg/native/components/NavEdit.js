@@ -24,7 +24,7 @@ class NavEdit extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  focused: state.editor.focused,
+  focused: state.notes.editor.focused,
 });
 export default connect(
   mapStateToProps,

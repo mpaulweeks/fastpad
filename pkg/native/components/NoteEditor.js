@@ -119,8 +119,8 @@ class NoteEditor extends React.Component {
 
 
 const mapStateToProps = state => ({
-  focused: state.editor.focused,
-  note: state.editor.note,
+  focused: state.notes.editor.focused,
+  note: state.notes.editor.note,
 });
 export default connect(
   mapStateToProps,

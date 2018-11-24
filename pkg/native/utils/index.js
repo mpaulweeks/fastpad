@@ -23,6 +23,7 @@ export const sortNotes = notes => {
   if (!notes) {
     return [];
   }
+
   function compare(a,b) {
     if (a.created < b.created) {
       return -1;
@@ -32,5 +33,6 @@ export const sortNotes = notes => {
     }
     return 0;
   }
-  return notes.sort(compare).reverse();
+  const notesArr = Object.keys(notes).map(k => notes[k]);
+  return notesArr.sort(compare).reverse();
 }

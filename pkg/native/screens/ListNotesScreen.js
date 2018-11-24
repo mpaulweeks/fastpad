@@ -7,7 +7,6 @@ import {
   Button,
   StyleSheet,
 } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
 
 import { sortNotes } from '../utils';
 import DataStore from '../utils/DataStore';
@@ -68,7 +67,6 @@ class ListNotesScreen extends React.Component {
     const { notes, loading } = this.props;
     return (
       <View style={styles.container}>
-        <NavigationEvents onWillFocus={this._fetchNotes}/>
         <ScrollView style={styles.scroll}>
           {sortNotes(notes).map((n, i) => (
             <ListNote
@@ -97,8 +95,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  notes: state.listNotes.notes,
-  loading: state.listNotes.loading,
+  notes: state.notes.list.notes,
+  loading: state.notes.list.loading,
 });
 
 export default connect(

@@ -8,8 +8,6 @@ Fast native-app notepad with encrypted cloud storage
 
 ## todo
 
-- delete tabbed nav altogether
-- edit existing notes
 - lazily persist redux store instead of doing it directly
 - create account, login, and settings page
 - get prod api working
